@@ -1,0 +1,36 @@
+@baseUrl =  http://localhost:3000/api/auth
+
+
+# @name Register
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+    "username": "quocan",
+    "email": "quocan@gmail.com",
+    "password": "123456",
+    "confirmPassword": "123456"
+}
+
+###
+# @name Login 
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "username": "quocan",
+    "password": "123456"
+}
+
+###
+
+GET {{baseUrl}}/test
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NmIxZDg0MDRlZDM5YzA5OTE4MjgyZiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjg0OTEwNDg3LCJleHAiOjE2ODQ5MTA1NDd9.jn8m9DMOCb5IT18Gj3oCYz-8e094C_ARvq6EVyt4_e8
+
+###
+
+POST {{baseUrl}}/refresh-token
+
+###
+
+GET {{baseUrl}}/logout

@@ -1,0 +1,39 @@
+@baseUrl =  http://localhost:3000/api/genres
+
+# User API
+
+# @name Getall
+GET {{baseUrl}} 
+
+###
+
+
+# @name GetbyId
+GET {{baseUrl}}/64afc0d05f5748fd29c3e8d5
+
+###
+
+# @name Create
+POST {{baseUrl}}/store
+Content-Type: application/json
+
+{
+    "name": "Chill/Thư giãn"
+}
+
+###
+
+# @name Update
+PUT {{baseUrl}}/update/6455ceffc8d917d3615a497a
+Content-Type: application/json
+
+{
+   "name": "Đèn"
+}
+
+###
+
+# @name Delete
+DELETE {{baseUrl}}/delete/6455ceffc8d917d3615a497b
+
+###
