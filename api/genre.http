@@ -24,11 +24,11 @@ Content-Type: application/json
 ###
 
 # @name Update
-PUT {{baseUrl}}/update/6455ceffc8d917d3615a497a
+PUT {{baseUrl}}/update/64afc0d05f5748fd29c3e8d5
 Content-Type: application/json
 
 {
-   "name": "Đèn"
+   "thumbnail_url":"/images/genres/1.jpg"
 }
 
 ###

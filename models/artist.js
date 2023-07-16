@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const Artist = new mongoose.Schema({
   name: { type: String, required: true },
-  image_url: { type: String, required: true },
   slug: { type: String, required: true },
+  image_url: { type: String, required: true },
   genre: { type: String, required: true },
   country: { type: String, required: true },
   followers: { type: Number, default: 0 },

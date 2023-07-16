@@ -1,4 +1,4 @@
-@baseUrl =  http://localhost:3000/api/gallery
+@baseUrl =  http://localhost:3000/api/galleries
 
 # User API
 
@@ -18,7 +18,7 @@ POST {{baseUrl}}/store
 Content-Type: application/json
 
 {
-    "image_url":"/images/gallery/4.jpg",
+    "image_url":"/images/gallery/5.jpg",
     "link": "https://www.facebook.com"
 }
 

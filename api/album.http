@@ -7,6 +7,20 @@ GET {{baseUrl}}
 
 ###
 
+# @name GetbyArtistId
+GET {{baseUrl}}/artist/64afc0d05f5748fd29c3e8d5
+
+###
+
+# @name GetbygenreId
+GET {{baseUrl}}/genre/64afc0d05f5748fd29c3e8d5
+
+###
+
+# @name GetbySlug
+GET {{baseUrl}}/album-2
+
+###
 
 # @name GetbyId
 GET {{baseUrl}}/64afc0d05f5748fd29c3e8d5
@@ -18,22 +32,27 @@ POST {{baseUrl}}/store
 Content-Type: application/json
 
 {
-    "name": "Chill/Thư giãn"
+    "name":"Album 7",
+    "thumbnail_url":"images/albums/album7.jpg",
+    "genreId":  "64afc0d05f5748fd29c3e8d5",
+    "tracks": ["5f4a7d1b1c9d440000d3e0a0","5f4a7d1b1c9d440000d3e0a1"],
+    "artistId": "64afc0d05f5748fd29c3e8d5",
+    "userId": "5f4a7d1b1c9d440000d3e0a0"
 }
 
 ###
 
 # @name Update
-PUT {{baseUrl}}/update/6455ceffc8d917d3615a497a
+PUT {{baseUrl}}/update/64b3880a6f83e6f1e1652512
 Content-Type: application/json
 
 {
-   "name": "Đèn"
+  "name":"Album 9"
 }
 
 ###
 
 # @name Delete
-DELETE {{baseUrl}}/delete/6455ceffc8d917d3615a497b
+DELETE {{baseUrl}}/delete/64b3880a6f83e6f1e1652512
 
 ###

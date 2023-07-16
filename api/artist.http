@@ -1,0 +1,43 @@
+@baseUrl =  http://localhost:3000/api/artists
+
+# User API
+
+# @name Getall
+GET {{baseUrl}} 
+
+###
+
+
+# @name GetbyId
+GET {{baseUrl}}/64afc0d05f5748fd29c3e8d5
+
+###
+
+# @name Create
+POST {{baseUrl}}/store
+Content-Type: application/json
+
+{
+  "name":"Bảo Anh",
+  "image_url":"/images/artists/baoanh.webp",
+  "genre":  "Pop",
+  "country":  "Việt Nam",
+  "userId": "64afc0d05f5748fd29c3e8d5"
+}
+
+###
+
+# @name Update
+PUT {{baseUrl}}/update/64b3880a6f83e6f1e1652512
+Content-Type: application/json
+
+{
+  "name":"Album 9"
+}
+
+###
+
+# @name Delete
+DELETE {{baseUrl}}/delete/64b3880a6f83e6f1e1652512
+
+###

@@ -1,63 +1,44 @@
 const mongoose = require('mongoose');
 const unidecode = require('unidecode');
-const AlbumModel = require('../models/album');
+const SongModel = require('../models/song');
 
-class AlbumController {
-  // [GET] api/albums
+class SongController {
+  // [GET] api/songs
   async getAll(req, res, next) {
     try {
-      const data = await AlbumModel.find();
+      const data = await SongModel.find();
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error);
     }
   }
 
-  // [GET] api/albums/artist/:id
-  async getAllByArtist(req, res, next) {
+  // [POST] api/songs/albums
+  async getSongsByTrackIdsArray(req, res, next) {
+    const { trackIds } = req.body;
     try {
-      const data = await AlbumModel.find({ artistId: req.params.id });
+      const data = await SongModel.find({ _id: { $in: trackIds } });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error);
     }
   }
 
-  // [GET] api/albums/genre/:id
-  async getAllByGenre(req, res, next) {
-    try {
-      const data = await AlbumModel.find({ genreId: req.params.id });
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-
-  // [GET] api/albums/:slug
-  async getOneBySlug(req, res, next) {
-    try {
-      const data = await AlbumModel.findOne({ slug: req.params.slug });
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-
-  // [GET] api/albums/:id
+  // [GET] api/songs/:id
   async getOne(req, res, next) {
     try {
       const { id } = req.params;
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({ error: 'Invalid product ID' });
       }
-      const data = await AlbumModel.findById(req.params.id);
+      const data = await SongModel.findById(req.params.id);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error);
     }
   }
 
-  // [POST] api/albums/store
+  // [POST] api/songs/store
   async create(req, res, next) {
     try {
       req.body.slug = unidecode(req.body.name)
@@ -65,7 +46,7 @@ class AlbumController {
         .replace(/ /g, '-')
         .replace(/[^\w-]+/g, '')
         .replace(/-+/g, '-');
-      const data = new AlbumModel(req.body);
+      const data = new SongModel(req.body);
       const savedCategory = await data.save();
       res.status(200).json(savedCategory);
     } catch (error) {
@@ -73,7 +54,7 @@ class AlbumController {
     }
   }
 
-  // [PUT] api/albums/update/:id
+  // [PUT] api/songs/update/:id
   async update(req, res, next) {
     try {
       req.body.slug = unidecode(req.body.name)
@@ -81,27 +62,27 @@ class AlbumController {
         .replace(/ /g, '-')
         .replace(/[^\w-]+/g, '')
         .replace(/-+/g, '-');
-      const data = await AlbumModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+      const data = await SongModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error);
     }
   }
 
-  // [DELETE] api/albums/delete/:id
+  // [DELETE] api/songs/delete/:id
   async delete(req, res, next) {
     try {
-      await AlbumModel.findByIdAndDelete(req.params.id);
+      await SongModel.findByIdAndDelete(req.params.id);
       res.status(200).json('Xóa thành công');
     } catch (error) {
       res.status(500).json(error);
     }
   }
 
-  // [GET] api/albums/rename
+  // [GET] api/songs/rename
   async rename(req, res, next) {
     try {
-      const result = await AlbumModel.updateMany({ priceoOld: 0 }, { $unset: { priceOld: 1 } });
+      const result = await SongModel.updateMany({ priceoOld: 0 }, { $unset: { priceOld: 1 } });
       res.status(200).json({ message: 'Các trường priceold bằng 0 đã được xóa thành công' });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
@@ -109,4 +90,4 @@ class AlbumController {
   }
 }
 
-module.exports = new AlbumController();
+module.exports = new SongController();
