@@ -3,17 +3,7 @@
 # User API
 
 # @name Getall
-GET {{baseUrl}} 
-
-###
-
-# @name GetbyArtistId
-GET {{baseUrl}}/artist/64afc0d05f5748fd29c3e8d5
-
-###
-
-# @name GetbygenreId
-GET {{baseUrl}}/genre/64afc0d05f5748fd29c3e8d5
+GET {{baseUrl}}?artistId=64b390058efd3f272746a780
 
 ###
 

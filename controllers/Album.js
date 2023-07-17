@@ -4,9 +4,20 @@ const AlbumModel = require('../models/album');
 
 class AlbumController {
   // [GET] api/albums
-  async getAll(req, res, next) {
+  async getQuery(req, res, next) {
     try {
-      const data = await AlbumModel.find();
+      const { artistId, genreId } = req.query;
+      let query = {};
+
+      if (artistId) {
+        query.artistId = artistId;
+      }
+
+      if (genreId) {
+        query.genreId = genreId;
+      }
+
+      const data = await AlbumModel.find(query);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error);

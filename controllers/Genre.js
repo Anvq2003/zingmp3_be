@@ -4,9 +4,16 @@ const GenreModel = require('../models/genre');
 
 class GenreController {
   // [GET] api/genres
-  async getAll(req, res, next) {
+  async getQuery(req, res, next) {
     try {
-      const data = await GenreModel.find();
+      const { row } = req.query;
+      let query = {};
+
+      if (row) {
+        query.row = row;
+      }
+
+      const data = await GenreModel.find(query);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error);
