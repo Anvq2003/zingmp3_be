@@ -12,6 +12,7 @@ const Song = new mongoose.Schema({
   favorites: { type: Number, default: 0 },
 
   userId: { type: String, required: false },
+  albumId: { type: mongoose.Schema.Types.ObjectId, ref: 'Album', required: false },
   artistId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist', required: false },
 
   createdAt: { type: Date, default: Date.now },

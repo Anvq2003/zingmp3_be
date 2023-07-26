@@ -6,7 +6,19 @@ class ArtistController {
   // [GET] api/artists
   async getAll(req, res, next) {
     try {
-      const data = await ArtistModel.find();
+      const query = Object.assign({}, req.query);
+      const data = await ArtistModel.find(query);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  // [GET] api/artists/:slug
+  async getBySlug(req, res, next) {
+    try {
+      const { slug } = req.params;
+      const data = await ArtistModel.findOne({ slug });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error);

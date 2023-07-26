@@ -6,17 +6,7 @@ class AlbumController {
   // [GET] api/albums
   async getQuery(req, res, next) {
     try {
-      const { artistId, genreId } = req.query;
-      let query = {};
-
-      if (artistId) {
-        query.artistId = artistId;
-      }
-
-      if (genreId) {
-        query.genreId = genreId;
-      }
-
+      const query = Object.assign({}, req.query);
       const data = await AlbumModel.find(query);
       res.status(200).json(data);
     } catch (error) {
