@@ -11,7 +11,7 @@ const Song = new mongoose.Schema({
   play_count: { type: Number, default: 0 },
   favorites: { type: Number, default: 0 },
 
-  userId: { type: String, required: false },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   albumId: { type: mongoose.Schema.Types.ObjectId, ref: 'Album', required: false },
   artistId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist', required: false },
 
