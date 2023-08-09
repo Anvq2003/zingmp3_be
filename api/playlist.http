@@ -1,4 +1,4 @@
-@baseUrl =  http://localhost:3000/api/galleries  
+@baseUrl =  http://localhost:3000/api/playlists  
 
 # User API
 

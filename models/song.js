@@ -1,22 +1,38 @@
 const mongoose = require('mongoose');
+const mongooseDelete = require('mongoose-delete');
+var slug = require('mongoose-slug-updater');
 
-const Song = new mongoose.Schema({
-  name: { type: String, required: true },
-  slug: { type: String, required: true },
-  artists: { type: Array, required: true },
-  duration: { type: Number, required: true },
-  image_url: { type: String, required: true },
-  audio_url: { type: String, required: true },
-  public: { type: Boolean, default: false },
-  play_count: { type: Number, default: 0 },
-  favorites: { type: Number, default: 0 },
+const InfoSchema = new mongoose.Schema(
+  {
+    _id: { type: String, required: true },
+    name: { type: String, required: true },
+    slug: { type: String, unique: true },
+  },
+  {
+    _id: false,
+  },
+);
 
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
-  albumId: { type: mongoose.Schema.Types.ObjectId, ref: 'Album', required: false },
-  artistId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist', required: false },
+const Song = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    slug: { type: String, slug: 'name', unique: true },
+    album: { type: InfoSchema, required: true },
+    artists: { type: [InfoSchema], required: true },
+    composers: { type: [InfoSchema], required: true },
+    duration: { type: Number, required: true },
+    thumbnail_url: { type: String, required: true },
+    audio_url: { type: String, required: true },
+    play_count: { type: Number, default: 0 },
+    favorites: { type: Number, default: 0 },
+    status: { type: Boolean, default: true },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
+mongoose.plugin(slug);
+Song.plugin(mongooseDelete, { overrideMethods: 'all', deletedAt: true });
 
 module.exports = mongoose.model('Song', Song);

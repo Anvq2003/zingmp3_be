@@ -3,24 +3,12 @@
 # User API
 
 # @name Getall
-GET {{baseUrl}} 
+GET {{baseUrl}}
+
 
 ###
-# @name GetallAlbums
-POST {{baseUrl}}/albums
-Content-Type: application/json
-
-{
-    "trackIds": [
-        "64b3f1c6bfbea58867fd230b",
-        "64b3f25bbfbea58867fd230d"
-    ]
-}
-###
-
-
 # @name GetbyId
-GET {{baseUrl}}/64afc0d05f5748fd29c3e8d5
+GET {{baseUrl}}/64c9ee2f999d05165d828c68
 
 ###
 
@@ -29,36 +17,66 @@ POST {{baseUrl}}/store
 Content-Type: application/json
 
 {
-    "name":"Vì em chưa bao giờ khóc",
+    "name":"demo",
+    "album": {
+        "_id": "64c9ee2f999d05165d828c68",
+        "name": "demo",
+        "slug": "demo"
+    },
     "artists": [
         {
-            "id": "64afc0d05f5748fd29c3e8d5",
-            "name": "Ca sĩ 1"
-        },{
-            "id": "64afc0d05f5748fd29c3e8d6",
-            "name": "Ca sĩ 2"
+            "_id": "64c9ee2f999d05165d828c68",
+            "name": "demo",
+            "slug": "demo"
         }
     ],
-    "duration": 200,
-    "image_url": "/images/songs/10.webp",
-    "audio_url": "https://firebasestorage.googleapis.com/v0/b/zingmp3-6bbfe.appspot.com/o/vi-em-chua-bao-gio-khoc.mp3?alt=media&token=79813ae7-b946-41d7-b13e-d709e0992586",
-    "public": true,
-    "artistId":"64b390058efd3f272746a780"
+    "composers": [
+        {
+            "_id": "64c9ee2f999d05165d828c68",
+            "name": "demo",
+            "slug": "demo"
+        }
+    ],
+    "duration": 0,
+    "image_url": "https://res.cloudinary.com/dqj3kgpoj/image/upload/v1626190249/albums/64c9ee2f999d05165d828c68/64c9ee2f999d05165d828c68.jpg",
+    "audio_url": "https://res.cloudinary.com/dqj3kgpoj/video/upload/v1626190249/albums/64c9ee2f999d05165d828c68/64c9ee2f999d05165d828c68.mp3"
 }
 
 ###
 
 # @name Update
-PUT {{baseUrl}}/update/6455ceffc8d917d3615a497a
+PUT {{baseUrl}}/update/64d364bcf1daaf1c65c96395
 Content-Type: application/json
 
 {
-   "name": "Đèn"
+   "name": "demo mới"
 }
 
 ###
 
 # @name Delete
-DELETE {{baseUrl}}/delete/6455ceffc8d917d3615a497b
+DELETE {{baseUrl}}/delete/64d364bcf1daaf1c65c96395
 
 ###
+###
+# @name DeleteMany
+POST {{baseUrl}}/delete-many
+Content-Type: application/json
+
+{
+    "ids": [
+        "64cb784edbeafd46df22e8b1",
+        ]
+}
+
+###
+# @name Trash
+GET {{baseUrl}}/trash
+
+###
+# @name Restore
+PATCH {{baseUrl}}/restore/64d364bcf1daaf1c65c96395
+
+###
+# @name ForceDelete
+DELETE {{baseUrl}}/force/64d364b5f1daaf1c65c96392

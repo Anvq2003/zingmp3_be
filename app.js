@@ -1,13 +1,21 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const admin = require('firebase-admin');
+const serviceAccount = require('./zingmp3_key.json');
 
-var { connect } = require('./config/db.config');
-var routes = require('./routes');
+const { connect } = require('./config/db.config');
+const routes = require('./routes');
 
-var app = express();
+const app = express();
+
+// Initialize Firebase Admin
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'zingmp3-6bbfe.appspot.com',
+});
 
 // Connect to DB
 connect();

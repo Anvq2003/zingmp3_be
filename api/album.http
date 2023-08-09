@@ -1,19 +1,14 @@
-@baseUrl =  http://localhost:3000/api/albums
+@baseUrl =  http://localhost:3000/api/albums  
 
 # User API
 
 # @name Getall
-GET {{baseUrl}}?artistId=64b390058efd3f272746a780
+GET {{baseUrl}}
+
 
 ###
-
-# @name GetbySlug
-GET {{baseUrl}}/album-2
-
-###
-
 # @name GetbyId
-GET {{baseUrl}}/64afc0d05f5748fd29c3e8d5
+GET {{baseUrl}}/64c9ee2f999d05165d828c68
 
 ###
 
@@ -22,27 +17,46 @@ POST {{baseUrl}}/store
 Content-Type: application/json
 
 {
-    "name":"Album 7",
-    "thumbnail_url":"images/albums/album7.jpg",
-    "genreId":  "64afc0d05f5748fd29c3e8d5",
-    "tracks": ["5f4a7d1b1c9d440000d3e0a0","5f4a7d1b1c9d440000d3e0a1"],
-    "artistId": "64afc0d05f5748fd29c3e8d5",
-    "userId": "5f4a7d1b1c9d440000d3e0a0"
+"name": "demo",
+"genres": ["64c9ee2f999d05165d828c68"],
+"artistId": "64c9ee2f999d05165d828c68"
 }
 
 ###
 
 # @name Update
-PUT {{baseUrl}}/update/64b3880a6f83e6f1e1652512
+PUT {{baseUrl}}/update/64d364bcf1daaf1c65c96395
 Content-Type: application/json
 
 {
-  "name":"Album 9"
+   "name": "demo mới"
 }
 
 ###
 
 # @name Delete
-DELETE {{baseUrl}}/delete/64b3880a6f83e6f1e1652512
+DELETE {{baseUrl}}/delete/64d364bcf1daaf1c65c96395
 
 ###
+###
+# @name DeleteMany
+POST {{baseUrl}}/delete-many
+Content-Type: application/json
+
+{
+    "ids": [
+        "64cb784edbeafd46df22e8b1",
+        ]
+}
+
+###
+# @name Trash
+GET {{baseUrl}}/trash
+
+###
+# @name Restore
+PATCH {{baseUrl}}/restore/64d364bcf1daaf1c65c96395
+
+###
+# @name ForceDelete
+DELETE {{baseUrl}}/force/64d364b5f1daaf1c65c96392
