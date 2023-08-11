@@ -2,6 +2,15 @@ const mongoose = require('mongoose');
 const GalleryModel = require('../models/Gallery');
 
 class GalleryController {
+  // [GET] api/galleries/all
+  async getAll(req, res, next) {
+    try {
+      const data = await GalleryModel.findWithDeleted();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
   // [GET] api/galleries
   async getQuery(req, res, next) {
     try {
@@ -38,16 +47,6 @@ class GalleryController {
     }
   }
 
-  // [POST] api/galleries/store-many
-  async createMany(req, res, next) {
-    try {
-      const data = await GalleryModel.insertMany(req.body);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
-  }
-
   // [PUT] api/galleries/update/:id
   async update(req, res, next) {
     try {
@@ -72,7 +71,7 @@ class GalleryController {
   async deleteMany(req, res, next) {
     const { ids } = req.body;
     try {
-      await GalleryModel.deleteMany({ _id: { $in: ids } });
+      await GalleryModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
       res.status(500).json(error.message);

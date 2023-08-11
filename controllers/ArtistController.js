@@ -2,6 +2,15 @@ const mongoose = require('mongoose');
 const ArtistModel = require('../models/Artist');
 
 class ArtistController {
+  // [GET] api/artists/all
+  async getAll(req, res, next) {
+    try {
+      const data = await ArtistModel.findWithDeleted();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
   // [GET] api/artists
   async getQuery(req, res, next) {
     try {
@@ -29,33 +38,41 @@ class ArtistController {
 
   // [POST] api/artists/store
   async create(req, res, next) {
-    try {
-      const data = new ArtistModel(req.body);
-      const savedCategory = await data.save();
-      res.status(200).json(savedCategory);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
-  }
+    // try {
+    const genres = JSON.parse(req.body.genres);
+    const roles = JSON.parse(req.body.roles);
 
-  // [POST] api/artists/store-many
-  async createMany(req, res, next) {
-    try {
-      const data = await ArtistModel.insertMany(req.body);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
+    const artistData = {
+      ...req.body,
+      genres,
+      roles,
+    };
+
+    const data = new ArtistModel(artistData);
+    const savedCategory = await data.save();
+    res.status(200).json(savedCategory);
+    // } catch (error) {
+    //   res.status(500).json(error.message);
+    // }
   }
 
   // [PUT] api/artists/update/:id
   async update(req, res, next) {
-    try {
-      const data = await ArtistModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
+    // try {
+
+    const genres = JSON.parse(req.body.genres);
+    const roles = JSON.parse(req.body.roles);
+
+    const artistData = {
+      ...req.body,
+      genres,
+      roles,
+    };
+    const data = await ArtistModel.findByIdAndUpdate(req.params.id, { $set: artistData }, { new: true });
+    res.status(200).json(data);
+    // } catch (error) {
+    //   res.status(500).json(error.message);
+    // }
   }
 
   // [DELETE] api/artists/delete/:id
@@ -70,9 +87,9 @@ class ArtistController {
 
   // [DELETE] api/artists/delete-many
   async deleteMany(req, res, next) {
-    const { ids } = req.body;
     try {
-      await ArtistModel.deleteMany({ _id: { $in: ids } });
+      const ids = req.body.ids;
+      await ArtistModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
       res.status(500).json(error.message);

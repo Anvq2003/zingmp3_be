@@ -6,8 +6,8 @@ const UserSong = new mongoose.Schema(
   {
     name: { type: String, required: true },
     slug: { type: String, slug: 'name', unique: true },
-    image_url: { type: String },
-    audio_url: { type: String, required: true },
+    imageUrl: { type: String },
+    audioUrl: { type: String, required: true },
     public: { type: Boolean, default: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     status: { type: Boolean, default: true },

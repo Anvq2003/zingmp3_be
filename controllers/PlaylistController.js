@@ -2,6 +2,15 @@ const mongoose = require('mongoose');
 const PlaylistModel = require('../models/Playlist');
 
 class PlaylistController {
+  // [GET] api/playlists/all
+  async getAll(req, res, next) {
+    try {
+      const data = await PlaylistModel.findWithDeleted();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
   // [GET] api/playlists
   async getQuery(req, res, next) {
     try {
@@ -38,16 +47,6 @@ class PlaylistController {
     }
   }
 
-  // [POST] api/playlists/store-many
-  async createMany(req, res, next) {
-    try {
-      const data = await PlaylistModel.insertMany(req.body);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
-  }
-
   // [PUT] api/playlists/update/:id
   async update(req, res, next) {
     try {
@@ -72,7 +71,7 @@ class PlaylistController {
   async deleteMany(req, res, next) {
     const { ids } = req.body;
     try {
-      await PlaylistModel.deleteMany({ _id: { $in: ids } });
+      await PlaylistModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
       res.status(500).json(error.message);

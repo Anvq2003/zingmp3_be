@@ -3,7 +3,7 @@ const mongooseDelete = require('mongoose-delete');
 
 const Gallery = new mongoose.Schema(
   {
-    image_url: { type: String, required: true },
+    imageUrl: { type: String, required: true },
     link: { type: String, required: true },
     order: { type: Number, default: 0 },
     status: { type: Boolean, default: true },

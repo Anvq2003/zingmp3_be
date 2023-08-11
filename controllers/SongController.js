@@ -3,6 +3,15 @@ const SongModel = require('../models/song');
 const multer = require('multer');
 
 class SongController {
+  // [GET] api/songs/all
+  async getAll(req, res, next) {
+    try {
+      const data = await SongModel.findWithDeleted();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
   // [GET] api/songs
   async getQuery(req, res, next) {
     try {
@@ -39,16 +48,6 @@ class SongController {
     }
   }
 
-  // [POST] api/songs/store-many
-  async createMany(req, res, next) {
-    try {
-      const data = await SongModel.insertMany(req.body);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
-  }
-
   // [PUT] api/songs/update/:id
   async update(req, res, next) {
     try {
@@ -73,7 +72,7 @@ class SongController {
   async deleteMany(req, res, next) {
     const { ids } = req.body;
     try {
-      await SongModel.deleteMany({ _id: { $in: ids } });
+      await SongModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
       res.status(500).json(error.message);

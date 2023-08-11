@@ -1,13 +1,9 @@
-@baseUrl =  http://localhost:3000/api/artists  
+@baseUrl =  http://localhost:3000/api/genres  
 
 # User API
 
 # @name Getall
 GET {{baseUrl}}
-
-###
-# @name Getall
-GET {{baseUrl}}/all
 
 
 ###
@@ -29,11 +25,11 @@ Content-Type: application/json
 ###
 
 # @name Update
-PUT {{baseUrl}}/update/64d364bcf1daaf1c65c96395
+PUT {{baseUrl}}/update/64d3a89ad150299387be583e
 Content-Type: application/json
 
 {
-   "name": "demo mới"
+   "name": "demo update"
 }
 
 ###

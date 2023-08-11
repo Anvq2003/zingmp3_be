@@ -2,6 +2,15 @@ const mongoose = require('mongoose');
 const AlbumModel = require('../models/Album');
 
 class AlbumController {
+  // [GET] api/albums/all
+  async getAll(req, res, next) {
+    try {
+      const data = await AlbumModel.findWithDeleted();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
   // [GET] api/albums
   async getQuery(req, res, next) {
     try {
@@ -39,16 +48,6 @@ class AlbumController {
     }
   }
 
-  // [POST] api/albums/store-many
-  async createMany(req, res, next) {
-    try {
-      const data = await AlbumModel.insertMany(req.body);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
-  }
-
   // [PUT] api/albums/update/:id
   async update(req, res, next) {
     try {
@@ -73,7 +72,7 @@ class AlbumController {
   async deleteMany(req, res, next) {
     const { ids } = req.body;
     try {
-      await AlbumModel.deleteMany({ _id: { $in: ids } });
+      await AlbumModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
       res.status(500).json(error.message);

@@ -1,7 +1,17 @@
 const mongoose = require('mongoose');
-const GenreModel = require('../models/Genre');
+const GenreModel = require('../models/genre');
 
 class GenreController {
+  // [GET] api/genres/all
+  async getAll(req, res, next) {
+    try {
+      const data = await GenreModel.findWithDeleted();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
   // [GET] api/genres
   async getQuery(req, res, next) {
     try {
@@ -50,12 +60,14 @@ class GenreController {
 
   // [PUT] api/genres/update/:id
   async update(req, res, next) {
-    try {
-      const data = await GenreModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
+    // try {
+    // console.log(JSON.stringify(req.body));
+    console.log('genre: ', req.body);
+    const data = await GenreModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+    res.status(200).json(data);
+    // } catch (error) {
+    //   res.status(500).json(error.message);
+    // }
   }
 
   // [DELETE] api/genres/delete/:id
@@ -72,7 +84,7 @@ class GenreController {
   async deleteMany(req, res, next) {
     const { ids } = req.body;
     try {
-      await GenreModel.deleteMany({ _id: { $in: ids } });
+      await GenreModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
       res.status(500).json(error.message);

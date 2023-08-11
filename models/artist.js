@@ -6,9 +6,11 @@ const mongooseDelete = require('mongoose-delete');
 const Artist = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    avatar_url: { type: String, required: true },
-    stage_name: { type: String, required: true },
-    slug: { type: String, slug: 'stage_name', unique: true },
+    avatarUrl: { type: String, required: true },
+    stageName: { type: String, required: true },
+    slug: { type: String, slug: 'stageName', unique: true },
+    roles: [{ type: String, required: true }],
+    bio: { type: String, required: true },
     genres: [{ type: String, required: true }],
     followers: { type: Number, default: 0 },
     status: { type: Boolean, default: true },
