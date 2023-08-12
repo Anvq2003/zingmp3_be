@@ -63,106 +63,95 @@ const handleUploadFile =
 const handleUploadFileSong =
   (action = 'create') =>
   async (req, res, next) => {
-    try {
-      const upload = uploadMulter.fields([
-        { name: 'thumbnailUrl', maxCount: 1 },
-        { name: 'audioUrl', maxCount: 1 },
-      ]);
+    // try {
+    const upload = uploadMulter.fields([
+      { name: 'thumbnailUrl', maxCount: 1 },
+      { name: 'audioUrl', maxCount: 1 },
+    ]);
 
-      upload(req, res, async (error) => {
-        if (error) {
-          return res.status(400).json({ error: 'Upload failed.' });
+    upload(req, res, async (error) => {
+      if (error) {
+        return res.status(400).json({ error: 'Upload failed.' });
+      }
+
+      if (!req.files) {
+        return res.status(400).json({ error: 'No file uploaded.' });
+      }
+
+      if (action === 'update') {
+        const { thumbnailUrl, audioUrl } = req.files;
+        if (!thumbnailUrl && !audioUrl) {
+          return next();
         }
+      }
 
-        if (!req.files) {
-          return res.status(400).json({ error: 'No file uploaded.' });
-        }
+      const storage = firebaseAdmin.storage();
+      const bucket = storage.bucket();
+      const uploadTasks = [];
+      const getSignedUrlTasks = [];
 
-        if (action === 'update') {
-          const { thumbnailUrl, audioUrl } = req.files;
-          if (!thumbnailUrl && !audioUrl) {
-            return next();
-          }
-        }
+      if (req.files.thumbnailUrl) {
+        const thumbnailUrl = req.files.thumbnailUrl[0];
+        const thumbnailPath = `images/${Date.now()}_${thumbnailUrl.originalname}`;
+        const thumbnailFile = bucket.file(thumbnailPath);
+        uploadTasks.push(
+          thumbnailFile.save(thumbnailUrl.buffer, {
+            metadata: {
+              contentType: thumbnailUrl.mimetype,
+            },
+          }),
+        );
 
-        // Tạo reference đến Firebase Storage bucket
-        const storage = firebaseAdmin.storage();
-        const bucket = storage.bucket();
+        getSignedUrlTasks.push(
+          thumbnailFile.getSignedUrl({
+            action: 'read',
+            expires: '03-09-2491', // Set an appropriate expiration date
+          }),
+        );
 
-        const uploadTasks = [];
+        req.body.thumbnailUrl = thumbnailPath;
+      }
 
-        if (req.files.thumbnailUrl) {
-          const thumbnailUrl = req.files.thumbnailUrl[0];
-          const thumbnailPath = `images/${Date.now()}_${thumbnailUrl.originalname}`;
-          const thumbnailFile = bucket.file(thumbnailPath);
-          uploadTasks.push(
-            thumbnailFile.save(thumbnailUrl.buffer, {
-              metadata: {
-                contentType: thumbnailUrl.mimetype,
-              },
-            }),
-          );
-        }
+      if (req.files.audioUrl) {
+        const audioUrl = req.files.audioUrl[0];
+        const audioPath = `sounds/${Date.now()}_${audioUrl.originalname}`;
+        const audioFile = bucket.file(audioPath);
+        uploadTasks.push(
+          audioFile.save(audioUrl.buffer, {
+            metadata: {
+              contentType: audioUrl.mimetype,
+            },
+          }),
+        );
 
-        if (req.files.audioUrl) {
-          const audioUrl = req.files.audioUrl[0];
-          const audioPath = `sounds/${Date.now()}_${audioUrl.originalname}`;
-          const audioFile = bucket.file(audioPath);
-          uploadTasks.push(
-            audioFile.save(audioUrl.buffer, {
-              metadata: {
-                contentType: audioUrl.mimetype,
-              },
-            }),
-          );
-        }
+        getSignedUrlTasks.push(
+          audioFile.getSignedUrl({
+            action: 'read',
+            expires: '03-09-2491', // Set an appropriate expiration date
+          }),
+        );
 
-        await Promise.all(uploadTasks).catch((error) => {
-          console.error(error);
-          return res.status(500).json({ error: 'File upload failed.' });
-        });
+        req.body.audioUrl = audioPath;
+      }
 
-        const getSignedUrlTasks = [];
+      await Promise.all(uploadTasks);
 
-        if (req.files.thumbnailUrl) {
-          const thumbnailFile = bucket.file(req.body.thumbnailUrl);
-          getSignedUrlTasks.push(
-            thumbnailFile.getSignedUrl({
-              action: 'read',
-              expires: '03-09-2491', // Set an appropriate expiration date
-            }),
-          );
-        }
+      const [thumbnailUrlResult, audioUrlResult] = await Promise.all(getSignedUrlTasks);
 
-        if (req.files.audioUrl) {
-          const audioFile = bucket.file(req.body.audioUrl);
-          getSignedUrlTasks.push(
-            audioFile.getSignedUrl({
-              action: 'read',
-              expires: '03-09-2491', // Set an appropriate expiration date
-            }),
-          );
-        }
+      if (thumbnailUrlResult) {
+        req.body.thumbnailUrl = thumbnailUrlResult[0];
+      }
 
-        const [thumbnailUrlResult, audioUrlResult] = await Promise.all(getSignedUrlTasks).catch((error) => {
-          console.error(error);
-          return res.status(500).json({ error: 'File URL retrieval failed.' });
-        });
+      if (audioUrlResult) {
+        req.body.audioUrl = audioUrlResult[0];
+      }
 
-        if (thumbnailUrlResult) {
-          req.body.thumbnailUrl = thumbnailUrlResult[0];
-        }
-
-        if (audioUrlResult) {
-          req.body.audioUrl = audioUrlResult[0];
-        }
-
-        next();
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Server error.' });
-    }
+      next();
+    });
+    // } catch (error) {
+    //   console.error(error);
+    //   res.status(500).json({ error: 'Server error.' });
+    // }
   };
 
 module.exports = {

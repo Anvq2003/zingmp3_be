@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 const SongModel = require('../models/song');
-const multer = require('multer');
 
 class SongController {
   // [GET] api/songs/all
   async getAll(req, res, next) {
     try {
-      const data = await SongModel.findWithDeleted();
+      const data = await SongModel.findWithDeleted().populate('albumId', '_id name slug').populate({
+        path: 'artists composers',
+        select: '_id name slug',
+      });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);
@@ -40,9 +42,18 @@ class SongController {
   // [POST] api/songs/store
   async create(req, res, next) {
     try {
-      const data = new SongModel(req.body);
-      const savedCategory = await data.save();
-      res.status(200).json(savedCategory);
+      const artists = JSON.parse(req.body.artists);
+      const composers = JSON.parse(req.body.composers);
+
+      const songData = {
+        ...req.body,
+        artists,
+        composers,
+      };
+
+      const data = new SongModel(songData);
+      const saveData = await data.save();
+      res.status(200).json(saveData);
     } catch (error) {
       res.status(500).json(error.message);
     }
@@ -51,7 +62,15 @@ class SongController {
   // [PUT] api/songs/update/:id
   async update(req, res, next) {
     try {
-      const data = await SongModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+      const artists = JSON.parse(req.body.artists);
+      const composers = JSON.parse(req.body.composers);
+
+      const songData = {
+        ...req.body,
+        artists,
+        composers,
+      };
+      const data = await SongModel.findByIdAndUpdate(req.params.id, { $set: songData }, { new: true });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);

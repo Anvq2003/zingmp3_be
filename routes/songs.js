@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { handleUploadFile, handleUploadFileSong } = require('../middlewares/upload');
+const { handleUploadFileSong } = require('../middlewares/upload');
 
 const SongController = require('../controllers/SongController');
 
