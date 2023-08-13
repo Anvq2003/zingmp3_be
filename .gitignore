@@ -3,3 +3,5 @@
 node_modules/
 
 .env
+
+zingmp3_key.json
