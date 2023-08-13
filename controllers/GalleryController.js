@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const GalleryModel = require('../models/Gallery');
+const GalleryModel = require('../models/gallery');
 
 class GalleryController {
   // [GET] api/galleries/all
@@ -104,6 +104,17 @@ class GalleryController {
   async forceDelete(req, res, next) {
     try {
       await GalleryModel.findByIdAndDelete(req.params.id);
+      res.status(200).json('Deleted successfully');
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
+  // [DELETE] api/Galleries/force-many
+  async forceDeleteMany(req, res, next) {
+    const { ids } = req.body;
+    try {
+      await GalleryModel.deleteMany({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
       res.status(500).json(error.message);

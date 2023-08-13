@@ -109,6 +109,17 @@ class UserController {
       res.status(500).json(error.message);
     }
   }
+
+  // [DELETE] api/users/force-many
+  async forceDeleteMany(req, res, next) {
+    const { ids } = req.body;
+    try {
+      await UserModel.deleteMany({ _id: { $in: ids } });
+      res.status(200).json('Deleted successfully');
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new UserController();

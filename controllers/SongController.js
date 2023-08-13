@@ -129,6 +129,17 @@ class SongController {
       res.status(500).json(error.message);
     }
   }
+
+  // [DELETE] api/songs/force-many
+  async forceDeleteMany(req, res, next) {
+    const { ids } = req.body;
+    try {
+      await SongModel.deleteMany({ _id: { $in: ids } });
+      res.status(200).json('Deleted successfully');
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new SongController();
