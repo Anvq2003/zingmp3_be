@@ -17,7 +17,7 @@ router.get('/:id', GenreController.getOne);
 router.post('/store', upload, handleUploadOrUpdateFile('imageUrl'), GenreController.create);
 router.put('/update/:id', upload, handleUploadOrUpdateFile('imageUrl', 'oldImageUrl'), GenreController.update);
 router.delete('/delete/:id', GenreController.delete);
-router.delete('/delete-many', GenreController.delete);
+router.delete('/delete-many', GenreController.deleteMany);
 router.patch('/restore/:id', GenreController.restore);
 router.delete('/force/:id', handleDeleteFile('oldImageUrl'), GenreController.forceDelete);
 router.delete('/force-many', handleDeleteMultipleFiles('oldImageUrls'), GenreController.forceDeleteMany);

@@ -17,7 +17,7 @@ router.get('/:id', AlbumController.getOne);
 router.post('/store', upload, handleUploadOrUpdateFile('thumbnailUrl'), AlbumController.create);
 router.put('/update/:id', upload, handleUploadOrUpdateFile('thumbnailUrl', 'oldThumbnailUrl'), AlbumController.update);
 router.delete('/delete/:id', AlbumController.delete);
-router.delete('/delete-many', AlbumController.delete);
+router.delete('/delete-many', AlbumController.deleteMany);
 router.patch('/restore/:id', AlbumController.restore);
 router.delete('/force/:id', handleDeleteFile('oldThumbnailUrl'), AlbumController.forceDelete);
 router.delete('/force-many', handleDeleteMultipleFiles('oldThumbnailUrls'), AlbumController.forceDeleteMany);

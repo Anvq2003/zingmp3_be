@@ -22,7 +22,7 @@ router.put(
   PlaylistController.update,
 );
 router.delete('/delete/:id', PlaylistController.delete);
-router.delete('/delete-many', PlaylistController.delete);
+router.delete('/delete-many', PlaylistController.deleteMany);
 router.patch('/restore/:id', PlaylistController.restore);
 router.delete('/force/:id', handleDeleteFile('oldThumbnailUrl'), PlaylistController.forceDelete);
 router.delete('/force-many', handleDeleteMultipleFiles('oldThumbnailUrls'), PlaylistController.forceDeleteMany);
