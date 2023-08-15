@@ -1,25 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const AlbumController = require('../controllers/AlbumController');
+const { validateAlbumData } = require('../middlewares/validationMiddleware');
 const {
   uploadMulter,
-  handleUploadOrUpdateFile,
-  handleDeleteFile,
-  handleDeleteMultipleFiles,
-} = require('../middlewares/upload');
-
-const upload = uploadMulter.single('thumbnailUrl');
+  handleUploadOrUpdateImage,
+  handleDeleteImage,
+  handleDeleteMultipleImages,
+} = require('../middlewares/uploadMiddleware');
 
 router.get('/', AlbumController.getQuery);
 router.get('/all', AlbumController.getAll);
 router.get('/trash', AlbumController.getTrash);
 router.get('/:id', AlbumController.getOne);
-router.post('/store', upload, handleUploadOrUpdateFile('thumbnailUrl'), AlbumController.create);
-router.put('/update/:id', upload, handleUploadOrUpdateFile('thumbnailUrl', 'oldThumbnailUrl'), AlbumController.update);
+router.post(
+  '/store',
+  uploadMulter.single('image'),
+  validateAlbumData,
+  handleUploadOrUpdateImage,
+  AlbumController.create,
+);
+router.put(
+  '/update/:id',
+  uploadMulter.single('image'),
+  handleUploadOrUpdateImage,
+  AlbumController.update,
+);
 router.delete('/delete/:id', AlbumController.delete);
 router.delete('/delete-many', AlbumController.deleteMany);
 router.patch('/restore/:id', AlbumController.restore);
-router.delete('/force/:id', handleDeleteFile('oldThumbnailUrl'), AlbumController.forceDelete);
-router.delete('/force-many', handleDeleteMultipleFiles('oldThumbnailUrls'), AlbumController.forceDeleteMany);
+router.delete('/force/:id', handleDeleteImage, AlbumController.forceDelete);
+router.delete('/force-many', handleDeleteMultipleImages, AlbumController.forceDeleteMany);
 
 module.exports = router;

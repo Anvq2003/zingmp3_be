@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ArtistModel = require('../models/Artist');
+const ArtistModel = require('../models/artist');
 
 class ArtistController {
   // [GET] api/artists/all
@@ -39,16 +39,7 @@ class ArtistController {
   // [POST] api/artists/store
   async create(req, res, next) {
     // try {
-    const genres = JSON.parse(req.body.genres);
-    const roles = JSON.parse(req.body.roles);
-
-    const artistData = {
-      ...req.body,
-      genres,
-      roles,
-    };
-
-    const data = new ArtistModel(artistData);
+    const data = new ArtistModel(req.body);
     const savedCategory = await data.save();
     res.status(200).json(savedCategory);
     // } catch (error) {
@@ -59,16 +50,11 @@ class ArtistController {
   // [PUT] api/artists/update/:id
   async update(req, res, next) {
     // try {
-
-    const genres = JSON.parse(req.body.genres);
-    const roles = JSON.parse(req.body.roles);
-
-    const artistData = {
-      ...req.body,
-      genres,
-      roles,
-    };
-    const data = await ArtistModel.findByIdAndUpdate(req.params.id, { $set: artistData }, { new: true });
+    const data = await ArtistModel.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true },
+    );
     res.status(200).json(data);
     // } catch (error) {
     //   res.status(500).json(error.message);

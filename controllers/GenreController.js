@@ -61,9 +61,11 @@ class GenreController {
   // [PUT] api/genres/update/:id
   async update(req, res, next) {
     // try {
-    // console.log(JSON.stringify(req.body));
-    console.log('genre: ', req.body);
-    const data = await GenreModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+    const data = await GenreModel.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true },
+    );
     res.status(200).json(data);
     // } catch (error) {
     //   res.status(500).json(error.message);

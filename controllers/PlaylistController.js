@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const PlaylistModel = require('../models/Playlist');
+const PlaylistModel = require('../models/playlist');
 
 class PlaylistController {
   // [GET] api/playlists/all
@@ -50,7 +50,11 @@ class PlaylistController {
   // [PUT] api/playlists/update/:id
   async update(req, res, next) {
     try {
-      const data = await PlaylistModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+      const data = await PlaylistModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        { new: true },
+      );
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);

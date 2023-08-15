@@ -17,9 +17,7 @@ POST {{baseUrl}}/store
 Content-Type: application/json
 
 {
-"name": "demo",
-"genres": ["64c9ee2f999d05165d828c68"],
-"artistId": "64c9ee2f999d05165d828c68"
+    "name": "demo"
 }
 
 ###

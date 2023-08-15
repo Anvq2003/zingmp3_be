@@ -6,7 +6,7 @@ const Album = new mongoose.Schema(
   {
     name: { type: String, required: true },
     slug: { type: String, slug: 'name', unique: true },
-    thumbnailUrl: { type: String },
+    imageUrl: { type: String, required: true },
     genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
     artistId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist' },
 

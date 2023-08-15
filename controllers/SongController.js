@@ -42,16 +42,7 @@ class SongController {
   // [POST] api/songs/store
   async create(req, res, next) {
     try {
-      const artists = JSON.parse(req.body.artists);
-      const composers = JSON.parse(req.body.composers);
-
-      const songData = {
-        ...req.body,
-        artists,
-        composers,
-      };
-
-      const data = new SongModel(songData);
+      const data = new SongModel(req.body);
       const saveData = await data.save();
       res.status(200).json(saveData);
     } catch (error) {
@@ -62,15 +53,11 @@ class SongController {
   // [PUT] api/songs/update/:id
   async update(req, res, next) {
     try {
-      const artists = JSON.parse(req.body.artists);
-      const composers = JSON.parse(req.body.composers);
-
-      const songData = {
-        ...req.body,
-        artists,
-        composers,
-      };
-      const data = await SongModel.findByIdAndUpdate(req.params.id, { $set: songData }, { new: true });
+      const data = await SongModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        { new: true },
+      );
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);

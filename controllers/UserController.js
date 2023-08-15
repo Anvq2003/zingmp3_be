@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const UserModel = require('../models/User');
+const UserModel = require('../models/user');
 
 class UserController {
   // [GET] api/users/all
@@ -50,7 +50,11 @@ class UserController {
   // [PUT] api/users/update/:id
   async update(req, res, next) {
     try {
-      const data = await UserModel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+      const data = await UserModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        { new: true },
+      );
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);

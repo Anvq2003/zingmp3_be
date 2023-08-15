@@ -44,12 +44,7 @@ class AlbumController {
   // [POST] api/albums/store
   async create(req, res, next) {
     try {
-      const genres = JSON.parse(req.body.genres);
-      const albumData = {
-        ...req.body,
-        genres,
-      };
-      const data = new AlbumModel(albumData);
+      const data = new AlbumModel(req.body);
       const savedCategory = await data.save();
       res.status(200).json(savedCategory);
     } catch (error) {
@@ -60,12 +55,11 @@ class AlbumController {
   // [PUT] api/albums/update/:id
   async update(req, res, next) {
     try {
-      const genres = JSON.parse(req.body.genres);
-      const albumData = {
-        ...req.body,
-        genres,
-      };
-      const data = await AlbumModel.findByIdAndUpdate(req.params.id, { $set: albumData }, { new: true });
+      const data = await AlbumModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        { new: true },
+      );
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);
