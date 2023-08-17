@@ -8,7 +8,7 @@ const Album = new mongoose.Schema(
     slug: { type: String, slug: 'name', unique: true },
     imageUrl: { type: String, required: true },
     genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
-    artistId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist' },
+    artists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Artist' }],
 
     favorites: { type: Number, default: 0 },
     playCount: { type: Number, default: 0 },

@@ -99,7 +99,7 @@ const albumSchema = Joi.object({
   ),
   oldImage: Joi.string().uri().allow(''),
   genres: Joi.array().items(Joi.string()),
-  artistId: Joi.string().required(),
+  artists: Joi.array().items(Joi.string()),
 
   favorites: Joi.number().default(0),
   playCount: Joi.number().default(0),

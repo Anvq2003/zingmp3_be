@@ -60,14 +60,21 @@ const deleteFileFromBucket = async (bucket, image) => {
 const handleUploadOrUpdateImage = async (req, res, next) => {
   try {
     const file = req.file;
+
     if (!file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+      req.body.imageUrl = req.body.oldImage;
+      return next();
     }
 
     const bucket = firebaseAdmin.storage().bucket();
     const oldImage = req.body.oldImage;
-    await deleteFileFromBucket(bucket, oldImage);
-    req.body.image = await uploadFileToBucketAndGetPath(bucket, file);
+
+    if (oldImage) {
+      // Delete the old image if it exists
+      await deleteFileFromBucket(bucket, oldImage);
+    }
+
+    req.body.imageUrl = await uploadFileToBucketAndGetPath(bucket, file);
     next();
   } catch (error) {
     console.error('Error handling file upload:', error);
@@ -77,10 +84,10 @@ const handleUploadOrUpdateImage = async (req, res, next) => {
 
 const handleDeleteImage = async (req, res, next) => {
   try {
-    const oldImage = req.body.oldImage;
-    if (oldImage) {
+    const image = req.body.image;
+    if (image) {
       const bucket = firebaseAdmin.storage().bucket();
-      await deleteFileFromBucket(bucket, oldImage);
+      await deleteFileFromBucket(bucket, image);
       next();
     }
   } catch (error) {
@@ -148,8 +155,8 @@ const handleUploadOrUpdateAudioAndImage = async (req, res, next) => {
 
 const handleDeleteAudioAndImage = async (req, res, next) => {
   try {
-    const oldAudio = req.body.oldAudio;
-    const oldImage = req.body.oldImage;
+    const oldAudio = req.body.audio;
+    const oldImage = req.body.image;
 
     const bucket = firebaseAdmin.storage().bucket();
     const deletePromises = [];

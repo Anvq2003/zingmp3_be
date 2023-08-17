@@ -10,7 +10,10 @@ class AlbumController {
           path: 'genres',
           model: 'Genre',
         })
-        .populate('artistId');
+        .populate({
+          path: 'artists',
+          model: 'Artist',
+        });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);
