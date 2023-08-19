@@ -38,7 +38,7 @@ Content-Type: application/json
         }
     ],
     "duration": 0,
-    "image_url": "https://res.cloudinary.com/dqj3kgpoj/image/upload/v1626190249/albums/64c9ee2f999d05165d828c68/64c9ee2f999d05165d828c68.jpg",
+    "imageUrl": "https://res.cloudinary.com/dqj3kgpoj/image/upload/v1626190249/albums/64c9ee2f999d05165d828c68/64c9ee2f999d05165d828c68.jpg",
     "audio_url": "https://res.cloudinary.com/dqj3kgpoj/video/upload/v1626190249/albums/64c9ee2f999d05165d828c68/64c9ee2f999d05165d828c68.mp3"
 }
 

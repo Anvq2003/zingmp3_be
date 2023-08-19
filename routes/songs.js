@@ -17,7 +17,8 @@ const upload = uploadMulter.fields([
 router.get('/', SongController.getQuery);
 router.get('/all', SongController.getAll);
 router.get('/trash', SongController.getTrash);
-router.get('/:id', SongController.getOne);
+router.get('/:param', SongController.getByParam);
+
 router.post(
   '/store',
   upload,

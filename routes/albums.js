@@ -12,7 +12,7 @@ const {
 router.get('/', AlbumController.getQuery);
 router.get('/all', AlbumController.getAll);
 router.get('/trash', AlbumController.getTrash);
-router.get('/:id', AlbumController.getOne);
+router.get('/:param', AlbumController.getByParam);
 router.post(
   '/store',
   uploadMulter.single('image'),

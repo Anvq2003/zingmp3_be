@@ -6,7 +6,8 @@ const Playlist = new mongoose.Schema(
   {
     name: { type: String, required: true },
     slug: { type: String, slug: 'name', unique: true },
-    imageUrl: { type: String, require: true },
+    imageUrl: { type: String },
+    public: { type: Boolean, default: false },
     tracks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song' }],
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     status: { type: Boolean, default: true },

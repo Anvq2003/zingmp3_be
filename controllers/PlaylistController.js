@@ -23,14 +23,22 @@ class PlaylistController {
   }
 
   // [GET] api/playlists/:id
-  async getOne(req, res, next) {
+  async getByParam(req, res, next) {
     try {
-      const { id } = req.params;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: 'Invalid product ID' });
+      const param = req.params.param;
+      let playlist;
+
+      if (mongoose.Types.ObjectId.isValid(param)) {
+        playlist = await PlaylistModel.findById(param);
+      } else {
+        playlist = await PlaylistModel.findOne({ slug: param });
       }
-      const data = await PlaylistModel.findById(req.params.id);
-      res.status(200).json(data);
+
+      if (!playlist) {
+        return res.status(404).json({ message: 'Playlist not found' });
+      }
+
+      res.status(200).json(playlist);
     } catch (error) {
       res.status(500).json(error.message);
     }

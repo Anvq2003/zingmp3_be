@@ -23,13 +23,32 @@ class UserController {
   }
 
   // [GET] api/users/:id
-  async getOne(req, res, next) {
+  async getByParam(req, res, next) {
+    try {
+      const param = req.params.param;
+      let user;
+
+      if (mongoose.Types.ObjectId.isValid(param)) {
+        user = await UserModel.findById(param);
+      } else {
+        user = await UserModel.findOne({ slug: param });
+      }
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.status(200).json(artist);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
+  // [GET] api/users/uid/:id
+  async getByUID(req, res, next) {
     try {
       const { id } = req.params;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: 'Invalid product ID' });
-      }
-      const data = await UserModel.findById(req.params.id);
+      const data = await UserModel.findOne({ UID: id });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);
@@ -38,13 +57,13 @@ class UserController {
 
   // [POST] api/users/store
   async create(req, res, next) {
-    // try {
-    const data = new UserModel(req.body);
-    const savedCategory = await data.save();
-    res.status(200).json(savedCategory);
-    // } catch (error) {
-    //   res.status(500).json(error.message);
-    // }
+    try {
+      const data = new UserModel(req.body);
+      const savedCategory = await data.save();
+      res.status(200).json(savedCategory);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
   }
 
   // [PUT] api/users/update/:id

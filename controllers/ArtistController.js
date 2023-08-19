@@ -22,15 +22,22 @@ class ArtistController {
     }
   }
 
-  // [GET] api/artists/:id
-  async getOne(req, res, next) {
+  async getByParam(req, res, next) {
     try {
-      const { id } = req.params;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: 'Invalid product ID' });
+      const param = req.params.param;
+      let artist;
+
+      if (mongoose.Types.ObjectId.isValid(param)) {
+        artist = await ArtistModel.findById(param);
+      } else {
+        artist = await ArtistModel.findOne({ slug: param });
       }
-      const data = await ArtistModel.findById(req.params.id);
-      res.status(200).json(data);
+
+      if (!artist) {
+        return res.status(404).json({ message: 'Artist not found' });
+      }
+
+      res.status(200).json(artist);
     } catch (error) {
       res.status(500).json(error.message);
     }
@@ -38,13 +45,13 @@ class ArtistController {
 
   // [POST] api/artists/store
   async create(req, res, next) {
-    // try {
-    const data = new ArtistModel(req.body);
-    const savedCategory = await data.save();
-    res.status(200).json(savedCategory);
-    // } catch (error) {
-    //   res.status(500).json(error.message);
-    // }
+    try {
+      const data = new ArtistModel(req.body);
+      const savedCategory = await data.save();
+      res.status(200).json(savedCategory);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
   }
 
   // [PUT] api/artists/update/:id

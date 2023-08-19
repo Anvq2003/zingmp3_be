@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { validateUserData } = require('../middlewares/validationMiddleware');
+const { validateUserData, validateUserAdminData } = require('../middlewares/validationMiddleware');
 const UserController = require('../controllers/UserController');
 const {
   uploadMulter,
@@ -12,14 +12,16 @@ const {
 router.get('/', UserController.getQuery);
 router.get('/all', UserController.getAll);
 router.get('/trash', UserController.getTrash);
-router.get('/:id', UserController.getOne);
+router.get('/:param', UserController.getByParam);
+router.get('/uid/:id', UserController.getByUID);
 router.post(
   '/store',
   uploadMulter.single('image'),
-  validateUserData,
+  validateUserAdminData,
   handleUploadOrUpdateImage,
   UserController.create,
 );
+router.post('/create-user', validateUserData, UserController.create);
 router.put(
   '/update/:id',
   uploadMulter.single('image'),

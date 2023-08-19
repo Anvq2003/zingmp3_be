@@ -6,8 +6,8 @@ const User = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     role: { type: String, required: true, default: 'user' },
     fullName: { type: String, required: true },
-    imageUrl: { type: String, required: true },
-    UID: { type: String, required: true },
+    imageUrl: { type: String },
+    UID: { type: String, required: true, unique: true },
 
     favoriteAlbums: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Album' }],
     favoriteSongs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song' }],

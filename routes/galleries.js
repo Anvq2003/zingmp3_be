@@ -13,7 +13,8 @@ const {
 router.get('/', GalleryController.getQuery);
 router.get('/all', GalleryController.getAll);
 router.get('/trash', GalleryController.getTrash);
-router.get('/:id', GalleryController.getOne);
+router.get('/:param', GalleryController.getByParam);
+
 router.post(
   '/store',
   uploadMulter.single('image'),

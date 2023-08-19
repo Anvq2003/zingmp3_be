@@ -18,7 +18,10 @@ class SongController {
   async getQuery(req, res, next) {
     try {
       const query = Object.assign({}, req.query);
-      const data = await SongModel.find(query);
+      const data = await SongModel.find(query).populate('albumId', '_id name slug').populate({
+        path: 'artists composers',
+        select: '_id name slug',
+      });
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);
@@ -26,14 +29,22 @@ class SongController {
   }
 
   // [GET] api/songs/:id
-  async getOne(req, res, next) {
+  async getByParam(req, res, next) {
     try {
-      const { id } = req.params;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: 'Invalid product ID' });
+      const param = req.params.param;
+      let song;
+
+      if (mongoose.Types.ObjectId.isValid(param)) {
+        song = await SongModel.findById(param);
+      } else {
+        song = await SongModel.findOne({ slug: param });
       }
-      const data = await SongModel.findById(req.params.id);
-      res.status(200).json(data);
+
+      if (!song) {
+        return res.status(404).json({ message: 'Song not found' });
+      }
+
+      res.status(200).json(song);
     } catch (error) {
       res.status(500).json(error.message);
     }

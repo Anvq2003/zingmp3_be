@@ -6,6 +6,8 @@ const {
   artistSchema,
   songSchema,
   userSchema,
+  userAdminSchema,
+  playlistSchema,
 } = require('./validationSchemas');
 
 const validateGenreData = validateDataAgainstSchema(genreSchema);
@@ -13,7 +15,9 @@ const validateGalleryData = validateDataAgainstSchema(gallerySchema);
 const validateAlbumData = validateDataAgainstSchema(albumSchema);
 const validateArtistData = validateDataAgainstSchema(artistSchema);
 const validateSongData = validateDataAgainstSchema(songSchema);
+const validateUserAdminData = validateDataAgainstSchema(userAdminSchema);
 const validateUserData = validateDataAgainstSchema(userSchema);
+const validatePlaylistData = validateDataAgainstSchema(playlistSchema);
 
 module.exports = {
   validateGenreData,
@@ -21,5 +25,7 @@ module.exports = {
   validateAlbumData,
   validateArtistData,
   validateSongData,
+  validateUserAdminData,
   validateUserData,
+  validatePlaylistData,
 };

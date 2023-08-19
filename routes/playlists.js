@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const PlaylistController = require('../controllers/PlaylistController');
+const { validatePlaylistData } = require('../middlewares/validationMiddleware');
 const {
   uploadMulter,
   handleUploadOrUpdateImage,
@@ -11,16 +12,19 @@ const {
 router.get('/', PlaylistController.getQuery);
 router.get('/all', PlaylistController.getAll);
 router.get('/trash', PlaylistController.getTrash);
-router.get('/:id', PlaylistController.getOne);
+router.get('/:param', PlaylistController.getByParam);
+
 router.post(
   '/store',
   uploadMulter.single('image'),
+  validatePlaylistData,
   handleUploadOrUpdateImage,
   PlaylistController.create,
 );
 router.put(
   '/update/:id',
   uploadMulter.single('image'),
+  validatePlaylistData,
   handleUploadOrUpdateImage,
   PlaylistController.update,
 );

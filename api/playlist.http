@@ -8,7 +8,7 @@ GET {{baseUrl}}
 
 ###
 # @name GetbyId
-GET {{baseUrl}}/64c9ee2f999d05165d828c68
+GET {{baseUrl}}/demo-MiksPtvvu
 
 ###
 
@@ -17,9 +17,10 @@ POST {{baseUrl}}/store
 Content-Type: application/json
 
 {
-"name": "demo",
-"genres": ["64c9ee2f999d05165d828c68"],
-"artistId": "64c9ee2f999d05165d828c68"
+    "name":"demo",
+    "imageUrl":"demo",
+    "tracks":["64c9ee2f999d05165d828c68"],
+    "userId":"64c9ee2f999d05165d828c68"
 }
 
 ###
@@ -59,4 +60,4 @@ PATCH {{baseUrl}}/restore/64d364bcf1daaf1c65c96395
 
 ###
 # @name ForceDelete
-DELETE {{baseUrl}}/force/64d364b5f1daaf1c65c96392
+DELETE {{baseUrl}}/force/64e0867b8b02fd99b60db115

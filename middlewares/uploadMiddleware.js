@@ -70,7 +70,6 @@ const handleUploadOrUpdateImage = async (req, res, next) => {
     const oldImage = req.body.oldImage;
 
     if (oldImage) {
-      // Delete the old image if it exists
       await deleteFileFromBucket(bucket, oldImage);
     }
 
@@ -91,6 +90,7 @@ const handleDeleteImage = async (req, res, next) => {
       next();
     }
   } catch (error) {
+    next(error);
     console.log(error);
   }
 };

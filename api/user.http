@@ -24,6 +24,19 @@ Content-Type: application/json
 
 ###
 
+# @name CreateUser
+POST {{baseUrl}}/create-user
+Content-Type: application/json
+
+{
+    "email":"voquocan@gmail.com",
+    "fullName":"demo",
+    "imageUrl":"demo",
+    "UID":"demo"
+}
+
+###
+
 # @name Update
 PUT {{baseUrl}}/update/64d364bcf1daaf1c65c96395
 Content-Type: application/json
@@ -35,7 +48,7 @@ Content-Type: application/json
 ###
 
 # @name Delete
-DELETE {{baseUrl}}/delete/64d364bcf1daaf1c65c96395
+DELETE {{baseUrl}}/delete/64df3490e32f70342a143844
 
 ###
 ###
@@ -59,4 +72,4 @@ PATCH {{baseUrl}}/restore/64d364bcf1daaf1c65c96395
 
 ###
 # @name ForceDelete
-DELETE {{baseUrl}}/force/64d364b5f1daaf1c65c96392
+DELETE {{baseUrl}}/force/64df3490e32f70342a143844

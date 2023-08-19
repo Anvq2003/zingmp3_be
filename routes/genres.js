@@ -12,7 +12,7 @@ const {
 router.get('/', GenreController.getQuery);
 router.get('/all', GenreController.getAll);
 router.get('/trash', GenreController.getTrash);
-router.get('/:id', GenreController.getOne);
+router.get('/:param', GenreController.getByParam);
 router.post(
   '/store',
   uploadMulter.single('image'),

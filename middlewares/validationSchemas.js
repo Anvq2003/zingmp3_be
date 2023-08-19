@@ -106,9 +106,9 @@ const albumSchema = Joi.object({
   status: Joi.boolean().default(true),
 });
 
-const userSchema = Joi.object({
+const userAdminSchema = Joi.object({
   email: Joi.string().email().required(),
-  role: Joi.string().required().default('user'),
+  role: Joi.string().default('user'),
   fullName: Joi.string().required(),
   image: Joi.alternatives().try(
     Joi.object({
@@ -131,11 +131,40 @@ const userSchema = Joi.object({
   status: Joi.boolean().default(true),
 });
 
+const userSchema = Joi.object({
+  email: Joi.string().email().required(),
+  role: Joi.string().default('user'),
+  fullName: Joi.string().required(),
+  imageUrl: Joi.string(),
+  oldImage: Joi.string().uri().allow(''),
+  UID: Joi.string().required(),
+
+  favoriteAlbums: Joi.array().items(Joi.string()),
+  favoriteSongs: Joi.array().items(Joi.string()),
+  favoriteArtists: Joi.array().items(Joi.string()),
+  history: Joi.array().items(Joi.string()),
+  historyAlbums: Joi.array().items(Joi.string()),
+  historyArtists: Joi.array().items(Joi.string()),
+  historySearches: Joi.array().items(Joi.string()),
+  status: Joi.boolean().default(true),
+});
+
+const playlistSchema = Joi.object({
+  name: Joi.string().required(),
+  imageUrl: Joi.string(),
+  public: Joi.boolean().default(false),
+  tracks: Joi.array().items(Joi.string()),
+  userId: Joi.string(),
+  status: Joi.boolean().default(true),
+});
+
 module.exports = {
   gallerySchema,
   genreSchema,
   songSchema,
   artistSchema,
   albumSchema,
+  userAdminSchema,
   userSchema,
+  playlistSchema,
 };

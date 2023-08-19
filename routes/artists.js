@@ -13,7 +13,8 @@ const {
 router.get('/', ArtistController.getQuery);
 router.get('/all', ArtistController.getAll);
 router.get('/trash', ArtistController.getTrash);
-router.get('/:id', ArtistController.getOne);
+router.get('/:param', ArtistController.getByParam);
+
 router.post(
   '/store',
   uploadMulter.single('image'),
