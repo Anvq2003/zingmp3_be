@@ -8,7 +8,7 @@ class PlaylistController {
       const data = await PlaylistModel.findWithDeleted();
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
   // [GET] api/playlists
@@ -18,7 +18,7 @@ class PlaylistController {
       const data = await PlaylistModel.find(query);
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -40,7 +40,7 @@ class PlaylistController {
 
       res.status(200).json(playlist);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -51,7 +51,7 @@ class PlaylistController {
       const savedCategory = await data.save();
       res.status(200).json(savedCategory);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -65,7 +65,7 @@ class PlaylistController {
       );
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -75,7 +75,7 @@ class PlaylistController {
       await PlaylistModel.delete({ _id: req.params.id });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -86,7 +86,7 @@ class PlaylistController {
       await PlaylistModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -98,7 +98,7 @@ class PlaylistController {
       });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -108,7 +108,7 @@ class PlaylistController {
       const data = await PlaylistModel.restore({ _id: req.params.id });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -118,7 +118,7 @@ class PlaylistController {
       await PlaylistModel.findByIdAndDelete(req.params.id);
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -129,7 +129,7 @@ class PlaylistController {
       await PlaylistModel.deleteMany({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 }

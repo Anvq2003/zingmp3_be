@@ -16,11 +16,11 @@ class AlbumController {
         });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
-  // [GET] api/albums
+  // [GET] api/albums?query=...
   async getQuery(req, res, next) {
     try {
       const query = Object.assign({}, req.query);
@@ -29,10 +29,28 @@ class AlbumController {
         .populate('artists', 'name slug');
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
+  // [GET] api/album/list?ids=
+  async getListByIds(req, res, next) {
+    try {
+      const ids = req.query.ids.split(',');
+      const limit = parseInt(req.query.limit) || 10;
+
+      const data = await AlbumModel.find({ _id: { $in: ids } })
+        .populate('genres', 'name slug')
+        .populate('artists', 'name slug imageUrl followers')
+        .sort({ playCount: -1, createdAt: -1 })
+        .limit(limit);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [GET] api/albums/genre/:id
   async getByGenreId(req, res, next) {
     try {
       const genreId = req.params.id;
@@ -41,11 +59,67 @@ class AlbumController {
         .populate('artists', 'name slug');
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
-  async getByGenres(req, res, next) {
+  // [GET] api/albums/artist/:id?
+  async getByArtistId(req, res, next) {
+    try {
+      const artistId = req.params.id;
+      if (!artistId) {
+        return res.status(404).json({ message: 'Artist ID is required' });
+      }
+
+      const limit = parseInt(req.query.limit) || 10;
+      const sortField = req.query.sort || 'createdAt';
+      const sortOrder = req.query.order === 'asc' ? 1 : -1;
+
+      const sortObj = {};
+      sortObj[sortField] = sortOrder;
+
+      const data = await AlbumModel.find({ artists: { $in: [artistId] } })
+        .populate('genres', 'name slug')
+        .populate('artists', 'name slug imageUrl followers')
+        .sort(sortObj)
+        .limit(limit);
+
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [GET] api/albums/artists/:ids
+  async getByArtistIds(req, res, next) {
+    try {
+      const artistIds = req.query.ids.split(',');
+      if (!artistIds) {
+        return res.status(404).json({ message: 'Artist IDS is required' });
+      }
+
+      const limit = parseInt(req.query.limit) || 10;
+      const sortField = req.query.sort || 'createdAt';
+      const sortOrder = req.query.order === 'asc' ? 1 : -1;
+
+      const sortObj = {};
+      sortObj[sortField] = sortOrder;
+
+      const artistObjectIds = artistIds.map((id) => new mongoose.Types.ObjectId(id));
+      const data = await AlbumModel.find({ artists: { $in: artistObjectIds } })
+        .populate('genres', 'name slug')
+        .populate('artists', 'name slug imageUrl followers')
+        .sort(sortObj)
+        .limit(limit);
+
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [GET] api/albums/genres?ids=id,id,id
+  async getByGenresIds(req, res, next) {
     try {
       const genreIds = req.query.ids.split(',');
       const genreObjectIds = genreIds.map((id) => new mongoose.Types.ObjectId(id));
@@ -54,10 +128,11 @@ class AlbumController {
         .populate('artists', 'name slug');
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
+  // [GET] api/albums/ (id or slug)
   async getByParam(req, res, next) {
     try {
       const param = req.params.param;
@@ -79,7 +154,7 @@ class AlbumController {
 
       res.status(200).json(album);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -90,7 +165,7 @@ class AlbumController {
       const savedCategory = await data.save();
       res.status(200).json(savedCategory);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -104,7 +179,7 @@ class AlbumController {
       );
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -114,7 +189,7 @@ class AlbumController {
       await AlbumModel.delete({ _id: req.params.id });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -125,7 +200,7 @@ class AlbumController {
       await AlbumModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -137,7 +212,7 @@ class AlbumController {
       });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -147,7 +222,7 @@ class AlbumController {
       const data = await AlbumModel.restore({ _id: req.params.id });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -157,7 +232,7 @@ class AlbumController {
       await AlbumModel.findByIdAndDelete(req.params.id);
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -168,7 +243,7 @@ class AlbumController {
       await AlbumModel.deleteMany({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 }

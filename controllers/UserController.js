@@ -8,7 +8,7 @@ class UserController {
       const data = await UserModel.findWithDeleted();
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
   // [GET] api/users
@@ -18,7 +18,7 @@ class UserController {
       const data = await UserModel.find(query);
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -40,7 +40,7 @@ class UserController {
 
       res.status(200).json(artist);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -51,7 +51,7 @@ class UserController {
       const data = await UserModel.findOne({ UID: id });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -62,7 +62,7 @@ class UserController {
       const savedCategory = await data.save();
       res.status(200).json(savedCategory);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -76,7 +76,7 @@ class UserController {
       );
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -86,7 +86,7 @@ class UserController {
       await UserModel.delete({ _id: req.params.id });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -97,7 +97,7 @@ class UserController {
       await UserModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -109,7 +109,7 @@ class UserController {
       });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -119,7 +119,7 @@ class UserController {
       const data = await UserModel.restore({ _id: req.params.id });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -129,7 +129,7 @@ class UserController {
       await UserModel.findByIdAndDelete(req.params.id);
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -140,7 +140,7 @@ class UserController {
       await UserModel.deleteMany({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 }

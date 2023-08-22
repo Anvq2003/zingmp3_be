@@ -11,8 +11,11 @@ const {
 
 router.get('/', AlbumController.getQuery);
 router.get('/all', AlbumController.getAll);
+router.get('/list', AlbumController.getListByIds);
 router.get('/genre/:id', AlbumController.getByGenreId);
-router.get('/genres', AlbumController.getByGenres);
+router.get('/artist/:id', AlbumController.getByArtistId);
+router.get('/artists', AlbumController.getByArtistIds);
+router.get('/genres', AlbumController.getByGenresIds);
 router.get('/trash', AlbumController.getTrash);
 router.get('/:param', AlbumController.getByParam);
 router.post(

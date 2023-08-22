@@ -11,7 +11,7 @@ class SongController {
       });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
   // [GET] api/songs
@@ -24,7 +24,7 @@ class SongController {
       });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -42,7 +42,7 @@ class SongController {
         .limit(limit);
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -60,9 +60,29 @@ class SongController {
         .limit(limit);
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
+  // [GET] api/songs/batch?ids=
+  async getListByIds(req, res, next) {
+    try {
+      const ids = req.query.ids.split(',');
+      const limit = parseInt(req.query.limit) || 10;
+
+      const data = await SongModel.find({ _id: { $in: ids } })
+        .populate('albumId', 'name slug')
+        .populate({
+          path: 'artists composers',
+          select: 'name slug imageUrl followers',
+        })
+        .sort({ playCount: -1, createdAt: -1 })
+        .limit(limit);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   // [GET] api/songs/artist/:id
   async getByArtistId(req, res, next) {
     try {
@@ -78,7 +98,7 @@ class SongController {
         .limit(limit);
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -100,7 +120,7 @@ class SongController {
 
       res.status(200).json(song);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -111,7 +131,7 @@ class SongController {
       const saveData = await data.save();
       res.status(200).json(saveData);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -125,7 +145,7 @@ class SongController {
       );
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -135,7 +155,7 @@ class SongController {
       await SongModel.delete({ _id: req.params.id });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -146,7 +166,7 @@ class SongController {
       await SongModel.delete({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -158,7 +178,7 @@ class SongController {
       });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -168,7 +188,7 @@ class SongController {
       const data = await SongModel.restore({ _id: req.params.id });
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -178,7 +198,7 @@ class SongController {
       await SongModel.findByIdAndDelete(req.params.id);
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -189,7 +209,7 @@ class SongController {
       await SongModel.deleteMany({ _id: { $in: ids } });
       res.status(200).json('Deleted successfully');
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ error: error.message });
     }
   }
 }
