@@ -11,6 +11,14 @@ GET {{baseUrl}}
 GET {{baseUrl}}/dance-viet-hay-nhat
 
 ###
+# @name GetbyGenreId
+GET {{baseUrl}}/genre/64db4a1c297475db5f9c3681
+
+###
+# @name GetbyGenres
+GET {{baseUrl}}/genres?ids=64db4a1c297475db5f9c3681,64ddac6f116682d1fde3bb05
+
+###
 
 # @name Create
 POST {{baseUrl}}/store

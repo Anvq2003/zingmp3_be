@@ -7,7 +7,7 @@ class SongController {
     try {
       const data = await SongModel.findWithDeleted().populate('albumId', '_id name slug').populate({
         path: 'artists composers',
-        select: '_id name slug',
+        select: 'name slug',
       });
       res.status(200).json(data);
     } catch (error) {
@@ -18,10 +18,64 @@ class SongController {
   async getQuery(req, res, next) {
     try {
       const query = Object.assign({}, req.query);
-      const data = await SongModel.find(query).populate('albumId', '_id name slug').populate({
+      const data = await SongModel.find(query).populate('albumId', 'name slug').populate({
         path: 'artists composers',
-        select: '_id name slug',
+        select: 'name slug',
       });
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
+  // [GET] api/songs/hot
+  async getHot(req, res, next) {
+    try {
+      const limit = parseInt(req.query.limit) || 10;
+      const data = await SongModel.find()
+        .populate('albumId', 'name slug')
+        .populate({
+          path: 'artists composers',
+          select: 'name slug',
+        })
+        .sort({ playCount: -1 })
+        .limit(limit);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
+  // [GET] api/songs/new
+  async getNew(req, res, next) {
+    try {
+      const limit = parseInt(req.query.limit) || 10;
+      const data = await SongModel.find()
+        .populate('albumId', 'name slug')
+        .populate({
+          path: 'artists composers',
+          select: 'name slug',
+        })
+        .sort({ createdAt: -1, playCount: -1 })
+        .limit(limit);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  // [GET] api/songs/artist/:id
+  async getByArtistId(req, res, next) {
+    try {
+      const limit = parseInt(req.query.limit) || 10;
+      const artistId = req.params.id;
+      const data = await SongModel.find({ $or: [{ artists: artistId }, { composers: artistId }] })
+        .populate('albumId', 'name slug')
+        .populate({
+          path: 'artists composers',
+          select: 'name slug',
+        })
+        .sort({ playCount: -1, createdAt: -1 })
+        .limit(limit);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);

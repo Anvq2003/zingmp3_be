@@ -16,9 +16,11 @@ const upload = uploadMulter.fields([
 
 router.get('/', SongController.getQuery);
 router.get('/all', SongController.getAll);
+router.get('/hot', SongController.getHot);
+router.get('/new', SongController.getNew);
+router.get('/artist/:id', SongController.getByArtistId);
 router.get('/trash', SongController.getTrash);
 router.get('/:param', SongController.getByParam);
-
 router.post(
   '/store',
   upload,

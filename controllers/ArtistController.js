@@ -22,6 +22,17 @@ class ArtistController {
     }
   }
 
+  // [GET] api/artists/hot
+  async getHot(req, res, next) {
+    try {
+      const limit = parseInt(req.query.limit) || 10;
+      const data = await ArtistModel.find().sort({ followers: -1 }).limit(limit);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
   async getByParam(req, res, next) {
     try {
       const param = req.params.param;
@@ -56,16 +67,16 @@ class ArtistController {
 
   // [PUT] api/artists/update/:id
   async update(req, res, next) {
-    // try {
-    const data = await ArtistModel.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body },
-      { new: true },
-    );
-    res.status(200).json(data);
-    // } catch (error) {
-    //   res.status(500).json(error.message);
-    // }
+    try {
+      const data = await ArtistModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        { new: true },
+      );
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
   }
 
   // [DELETE] api/artists/delete/:id

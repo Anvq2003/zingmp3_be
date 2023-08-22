@@ -19,11 +19,39 @@ class AlbumController {
       res.status(500).json(error.message);
     }
   }
+
   // [GET] api/albums
   async getQuery(req, res, next) {
     try {
       const query = Object.assign({}, req.query);
-      const data = await AlbumModel.find(query);
+      const data = await AlbumModel.find(query)
+        .populate('genres', 'name slug')
+        .populate('artists', 'name slug');
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
+  async getByGenreId(req, res, next) {
+    try {
+      const genreId = req.params.id;
+      const data = await AlbumModel.find({ genres: { $in: [genreId] } })
+        .populate('genres', 'name slug')
+        .populate('artists', 'name slug');
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
+  async getByGenres(req, res, next) {
+    try {
+      const genreIds = req.query.ids.split(',');
+      const genreObjectIds = genreIds.map((id) => new mongoose.Types.ObjectId(id));
+      const data = await AlbumModel.find({ genres: { $in: genreObjectIds } })
+        .populate('genres', 'name slug')
+        .populate('artists', 'name slug');
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json(error.message);
@@ -36,9 +64,13 @@ class AlbumController {
       let album;
 
       if (mongoose.Types.ObjectId.isValid(param)) {
-        album = await AlbumModel.findById(param);
+        album = await AlbumModel.findById(param)
+          .populate('genres', 'name slug')
+          .populate('artists', 'name imageUrl slug followers');
       } else {
-        album = await AlbumModel.findOne({ slug: param });
+        album = await AlbumModel.findOne({ slug: param })
+          .populate('genres', 'name slug')
+          .populate('artists', 'name imageUrl slug followers');
       }
 
       if (!album) {

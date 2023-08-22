@@ -29,6 +29,7 @@ const genreSchema = Joi.object({
     Joi.any(),
   ),
   oldImage: Joi.string().uri().allow(''),
+  isHome: Joi.boolean().default(false),
   status: Joi.boolean().default(true),
 });
 

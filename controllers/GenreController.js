@@ -68,16 +68,16 @@ class GenreController {
 
   // [PUT] api/genres/update/:id
   async update(req, res, next) {
-    // try {
-    const data = await GenreModel.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body },
-      { new: true },
-    );
-    res.status(200).json(data);
-    // } catch (error) {
-    //   res.status(500).json(error.message);
-    // }
+    try {
+      const data = await GenreModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        { new: true },
+      );
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
   }
 
   // [DELETE] api/genres/delete/:id

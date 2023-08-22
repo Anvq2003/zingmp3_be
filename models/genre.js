@@ -8,6 +8,7 @@ const Genre = new mongoose.Schema(
     slug: { type: String, slug: 'name', unique: true },
     imageUrl: { type: String, required: true },
     row: { type: Number, default: 0 },
+    isHome: { type: Boolean, default: false },
     status: { type: Boolean, default: true },
   },
   {
