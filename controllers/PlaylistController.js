@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const PlaylistModel = require('../models/playlist');
+const SongModel = require('../models/song');
 
 class PlaylistController {
   // [GET] api/playlists/all
@@ -29,9 +30,9 @@ class PlaylistController {
       let playlist;
 
       if (mongoose.Types.ObjectId.isValid(param)) {
-        playlist = await PlaylistModel.findById(param);
+        playlist = await PlaylistModel.findById(param).populate('userId', 'fullName');
       } else {
-        playlist = await PlaylistModel.findOne({ slug: param });
+        playlist = await PlaylistModel.findOne({ slug: param }).populate('userId', 'fullName');
       }
 
       if (!playlist) {
@@ -41,6 +42,54 @@ class PlaylistController {
       res.status(200).json(playlist);
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  }
+
+  async addSongToPlaylist(req, res) {
+    const playlistId = req.params.playlistId;
+    const songId = req.body.songId;
+
+    try {
+      const playlist = await PlaylistModel.findById(playlistId);
+      if (!playlist) {
+        return res.status(404).json({ message: 'Playlist is required.' });
+      }
+
+      const song = await SongModel.findById(songId);
+      if (!song) {
+        return res.status(404).json({ message: 'Song is required.' });
+      }
+
+      playlist.tracks.addToSet(songId);
+      await playlist.save();
+
+      return res.status(200).json(song);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  async removeSongFromPlaylist(req, res) {
+    const playlistId = req.params.playlistId;
+    const songId = req.body.songId;
+
+    try {
+      const playlist = await PlaylistModel.findById(playlistId);
+      if (!playlist) {
+        return res.status(404).json({ message: 'Playlist is required.' });
+      }
+
+      const songIndex = playlist.tracks.indexOf(songId);
+      if (songIndex === -1) {
+        return res.status(404).json({ message: 'Song not found in playlist.' });
+      }
+
+      playlist.tracks.splice(songIndex, 1);
+      await playlist.save();
+
+      return res.status(200).json({ message: 'Song removed from playlist.' });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
     }
   }
 

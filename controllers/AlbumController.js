@@ -141,7 +141,7 @@ class AlbumController {
       if (mongoose.Types.ObjectId.isValid(param)) {
         album = await AlbumModel.findById(param)
           .populate('genres', 'name slug')
-          .populate('artists', 'name imageUrl slug followers');
+          .populate('artists', 'name slug imageUrl followers');
       } else {
         album = await AlbumModel.findOne({ slug: param })
           .populate('genres', 'name slug')

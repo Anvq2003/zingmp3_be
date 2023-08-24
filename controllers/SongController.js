@@ -70,7 +70,7 @@ class SongController {
       const limit = parseInt(req.query.limit) || 10;
 
       const data = await SongModel.find({ _id: { $in: ids } })
-        .populate('albumId', 'name slug')
+        .populate('albumId')
         .populate({
           path: 'artists composers',
           select: 'name slug imageUrl followers',

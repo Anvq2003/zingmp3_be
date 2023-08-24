@@ -9,7 +9,7 @@ const Playlist = new mongoose.Schema(
     imageUrl: { type: String },
     public: { type: Boolean, default: false },
     tracks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song' }],
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
     status: { type: Boolean, default: true },
   },
   {

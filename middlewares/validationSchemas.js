@@ -155,7 +155,7 @@ const playlistSchema = Joi.object({
   imageUrl: Joi.string(),
   public: Joi.boolean().default(false),
   tracks: Joi.array().items(Joi.string()),
-  userId: Joi.string(),
+  userId: Joi.string().required(),
   status: Joi.boolean().default(true),
 });
 

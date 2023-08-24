@@ -5,8 +5,10 @@ const genresRouter = require('./genres');
 const playlistsRouter = require('./playlists');
 const songsRouter = require('./songs');
 const usersRouter = require('./users');
+const siteRouter = require('./site');
 
 function routes(app) {
+  app.use('/api', siteRouter);
   app.use('/api/albums', albumsRouter);
   app.use('/api/artists', artistsRouter);
   app.use('/api/galleries', galleriesRouter);
