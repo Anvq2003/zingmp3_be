@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const AlbumModel = require('../models/album');
+const UserModel = require('../models/user');
 
 class AlbumController {
   // [GET] api/albums/all
@@ -153,6 +154,63 @@ class AlbumController {
       }
 
       res.status(200).json(album);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [POST] api/albums/toggle-like
+  async toggleLike(req, res, next) {
+    try {
+      const { albumId, userId } = req.body;
+      if (!albumId) {
+        return res.status(400).json({ message: 'Album ID not found' });
+      }
+      if (!userId) {
+        return res.status(400).json({ message: 'User ID not found' });
+      }
+
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const isLiked = user.favoriteAlbums.includes(albumId);
+
+      const album = await AlbumModel.findById(albumId);
+      if (!album) {
+        return res.status(404).json({ message: 'album not found' });
+      }
+
+      if (isLiked) {
+        user.favoriteAlbums = user.favoriteAlbums.filter((id) => id.toString() !== albumId);
+        await user.save();
+
+        if (album.favorites > 0) {
+          album.favorites -= 1;
+          await album.save();
+        }
+
+        return res.status(200).json({
+          updatedUserFavorites: user.favoriteAlbums,
+          updatedAlbumFavorites: song.favorites,
+          message: 'Album unliked successfully',
+          liked: false,
+        });
+      } else {
+        user.favoriteAlbums.push(albumId);
+        await user.save();
+
+        album.favorites += 1;
+        await album.save();
+
+        return res.status(200).json({
+          updatedUserFavorites: user.favoriteAlbums,
+          updatedAlbumFavorites: album.favorites,
+          message: 'Album liked successfully',
+          liked: true,
+        });
+      }
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

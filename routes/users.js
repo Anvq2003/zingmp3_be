@@ -14,6 +14,9 @@ router.get('/all', UserController.getAll);
 router.get('/trash', UserController.getTrash);
 router.get('/:param', UserController.getByParam);
 router.get('/uid/:id', UserController.getByUID);
+router.post('/history/song', UserController.createHistorySong);
+router.post('/history/album', UserController.createHistoryAlbum);
+router.post('/history/playlist', UserController.createHistoryPlaylist);
 router.post(
   '/store',
   uploadMulter.single('image'),

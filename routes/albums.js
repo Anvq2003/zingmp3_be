@@ -18,6 +18,7 @@ router.get('/artists', AlbumController.getByArtistIds);
 router.get('/genres', AlbumController.getByGenresIds);
 router.get('/trash', AlbumController.getTrash);
 router.get('/:param', AlbumController.getByParam);
+router.post('/toggle-like', AlbumController.toggleLike);
 router.post(
   '/store',
   uploadMulter.single('image'),

@@ -140,12 +140,12 @@ const userSchema = Joi.object({
   oldImage: Joi.string().uri().allow(''),
   UID: Joi.string().required(),
 
-  favoriteAlbums: Joi.array().items(Joi.string()),
   favoriteSongs: Joi.array().items(Joi.string()),
-  favoriteArtists: Joi.array().items(Joi.string()),
-  history: Joi.array().items(Joi.string()),
+  favoriteAlbums: Joi.array().items(Joi.string()),
+  followedArtists: Joi.array().items(Joi.string()),
+  historySongs: Joi.array().items(Joi.string()),
+  historyPlaylists: Joi.array().items(Joi.string()),
   historyAlbums: Joi.array().items(Joi.string()),
-  historyArtists: Joi.array().items(Joi.string()),
   historySearches: Joi.array().items(Joi.string()),
   status: Joi.boolean().default(true),
 });

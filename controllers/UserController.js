@@ -55,6 +55,96 @@ class UserController {
     }
   }
 
+  // [POST] api/users/history/song
+  async createHistorySong(req, res, next) {
+    try {
+      const { songId, userId } = req.body;
+      if (!songId) {
+        return res.status(400).json({ message: 'Song ID not found' });
+      }
+      if (!userId) {
+        return res.status(400).json({ message: 'User ID not found' });
+      }
+
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const songIndex = user.historySongs.findIndex((id) => id.toString() === songId);
+      if (songIndex !== -1) {
+        user.historySongs.splice(songIndex, 1);
+      }
+
+      user.historySongs.unshift(songId);
+      await user.save();
+
+      res.status(200).json({ message: 'Song added to history successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [POST] api/users/history/album
+  async createHistoryAlbum(req, res, next) {
+    try {
+      const { albumId, userId } = req.body;
+      if (!albumId) {
+        return res.status(400).json({ message: 'Album ID not found' });
+      }
+      if (!userId) {
+        return res.status(400).json({ message: 'User ID not found' });
+      }
+
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const songIndex = user.historyAlbums.findIndex((id) => id.toString() === albumId);
+      if (songIndex !== -1) {
+        user.historyAlbums.splice(songIndex, 1);
+      }
+
+      user.historyAlbums.unshift(albumId);
+      await user.save();
+
+      res.status(200).json({ message: 'Album added to history successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [POST] api/users/history/playlist
+  async createHistoryPlaylist(req, res, next) {
+    try {
+      const { playlistId, userId } = req.body;
+      if (!playlistId) {
+        return res.status(400).json({ message: 'Playlist ID not found' });
+      }
+      if (!userId) {
+        return res.status(400).json({ message: 'User ID not found' });
+      }
+
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const songIndex = user.historyPlaylists.findIndex((id) => id.toString() === playlistId);
+      if (songIndex !== -1) {
+        user.historyPlaylists.splice(songIndex, 1);
+      }
+
+      user.historyPlaylists.unshift(playlistId);
+      await user.save();
+
+      res.status(200).json({ message: 'Song added to history successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   // [POST] api/users/store
   async create(req, res, next) {
     try {

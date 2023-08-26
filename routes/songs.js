@@ -20,8 +20,10 @@ router.get('/hot', SongController.getHot);
 router.get('/new', SongController.getNew);
 router.get('/list', SongController.getListByIds);
 router.get('/artist/:id', SongController.getByArtistId);
+router.get('/artists/', SongController.getByArtistIds);
 router.get('/trash', SongController.getTrash);
 router.get('/:param', SongController.getByParam);
+router.post('/toggle-like', SongController.toggleLike);
 router.post(
   '/store',
   upload,
