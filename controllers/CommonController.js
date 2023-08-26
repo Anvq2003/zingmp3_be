@@ -1,6 +1,7 @@
 const SongModel = require('../models/song');
 const AlbumModel = require('../models/album');
 const ArtistModel = require('../models/artist');
+const UserModel = require('../models/user');
 
 class CommonController {
   // [GET] api/search?q=&
@@ -66,7 +67,6 @@ class CommonController {
     }
   }
 
-  // [POST] api/toggle-like
   async toggleLike(req, res) {
     const { itemId, userId, itemType } = req.body;
 
@@ -100,9 +100,18 @@ class CommonController {
 
       if (isLiked) {
         user.favoriteSongs = user.favoriteSongs.filter((id) => id.toString() !== itemId);
-        item.favorites -= 1;
+        user.favoriteAlbums = user.favoriteAlbums.filter((id) => id.toString() !== itemId);
+
+        if (item.favorites > 0) {
+          item.favorites -= 1;
+        }
       } else {
-        user.favoriteSongs.push(itemId);
+        if (itemType === 'song') {
+          user.favoriteSongs.push(itemId);
+        } else if (itemType === 'album') {
+          user.favoriteAlbums.push(itemId);
+        }
+
         item.favorites += 1;
       }
 
@@ -155,7 +164,7 @@ class CommonController {
 
       return res.status(200).json({
         updatedFollowedArtists: user.followedArtists,
-        updatedFollowers: artist.followers,
+        updatedFollowerCount: artist.followers,
         message: `Artist ${isFollowing ? 'unfollowed' : 'followed'} successfully`,
         isFollowing: !isFollowing,
       });

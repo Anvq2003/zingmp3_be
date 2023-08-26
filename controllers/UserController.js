@@ -79,7 +79,7 @@ class UserController {
       user.historySongs.unshift(songId);
       await user.save();
 
-      res.status(200).json({ message: 'Song added to history successfully' });
+      res.status(200).json({ field: 'historySongs', value: user.historySongs });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -109,7 +109,7 @@ class UserController {
       user.historyAlbums.unshift(albumId);
       await user.save();
 
-      res.status(200).json({ message: 'Album added to history successfully' });
+      res.status(200).json({ field: 'historyAlbums', value: user.historyAlbums });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -139,7 +139,7 @@ class UserController {
       user.historyPlaylists.unshift(playlistId);
       await user.save();
 
-      res.status(200).json({ message: 'Song added to history successfully' });
+      res.status(200).json({ field: 'historyPlaylists', value: user.historyPlaylists });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
