@@ -30,9 +30,23 @@ class PlaylistController {
       let playlist;
 
       if (mongoose.Types.ObjectId.isValid(param)) {
-        playlist = await PlaylistModel.findById(param).populate('userId', 'fullName');
+        playlist = await PlaylistModel.findById(param)
+          .populate('userId', 'fullName')
+          .populate({
+            path: 'tracks',
+            populate: {
+              path: 'artists composers albumId',
+            },
+          });
       } else {
-        playlist = await PlaylistModel.findOne({ slug: param }).populate('userId', 'fullName');
+        playlist = await PlaylistModel.findOne({ slug: param })
+          .populate('userId', 'fullName')
+          .populate({
+            path: 'tracks',
+            populate: {
+              path: 'artists composers albumId',
+            },
+          });
       }
 
       if (!playlist) {
@@ -40,6 +54,19 @@ class PlaylistController {
       }
 
       res.status(200).json(playlist);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [GET] api/playlist/list?ids=
+  async getListByIds(req, res, next) {
+    try {
+      const ids = req.query.ids.split(',');
+      const limit = parseInt(req.query.limit) || 10;
+
+      const data = await PlaylistModel.find({ _id: { $in: ids } }).limit(limit);
+      res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

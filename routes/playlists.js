@@ -12,6 +12,7 @@ const {
 router.get('/', PlaylistController.getQuery);
 router.get('/all', PlaylistController.getAll);
 router.get('/trash', PlaylistController.getTrash);
+router.get('/list', PlaylistController.getListByIds);
 router.get('/:param', PlaylistController.getByParam);
 router.post('/songs/add/:playlistId', PlaylistController.addSongToPlaylist);
 router.delete('/songs/remove/:playlistId', PlaylistController.removeSongFromPlaylist);
