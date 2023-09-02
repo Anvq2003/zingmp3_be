@@ -89,11 +89,8 @@ class UserController {
   async createHistoryAlbum(req, res, next) {
     try {
       const { albumId, userId } = req.body;
-      if (!albumId) {
-        return res.status(400).json({ message: 'Album ID not found' });
-      }
-      if (!userId) {
-        return res.status(400).json({ message: 'User ID not found' });
+      if (!albumId || !userId) {
+        return res.status(400).json({ message: 'Album ID or User ID not found' });
       }
 
       const user = await UserModel.findById(userId);
@@ -107,6 +104,8 @@ class UserController {
       }
 
       user.historyAlbums.unshift(albumId);
+      console.log('playlistId', albumId);
+      console.log(' user.historyAlbums', user.historyAlbums);
       await user.save();
 
       res.status(200).json({ field: 'historyAlbums', value: user.historyAlbums });
@@ -119,11 +118,8 @@ class UserController {
   async createHistoryPlaylist(req, res, next) {
     try {
       const { playlistId, userId } = req.body;
-      if (!playlistId) {
-        return res.status(400).json({ message: 'Playlist ID not found' });
-      }
-      if (!userId) {
-        return res.status(400).json({ message: 'User ID not found' });
+      if (!playlistId || !userId) {
+        return res.status(400).json({ message: 'Invalid playlist or user ID' });
       }
 
       const user = await UserModel.findById(userId);
@@ -137,6 +133,7 @@ class UserController {
       }
 
       user.historyPlaylists.unshift(playlistId);
+
       await user.save();
 
       res.status(200).json({ field: 'historyPlaylists', value: user.historyPlaylists });

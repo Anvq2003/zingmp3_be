@@ -24,6 +24,7 @@ router.get('/artists/', SongController.getByArtistIds);
 router.get('/trash', SongController.getTrash);
 router.get('/:param', SongController.getByParam);
 router.post('/toggle-like', SongController.toggleLike);
+router.post('/increase-count', SongController.playCount);
 router.post(
   '/store',
   upload,

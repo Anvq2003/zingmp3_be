@@ -225,6 +225,25 @@ class SongController {
     }
   }
 
+  // [POST] api/songs/play-count
+  async playCount(req, res, next) {
+    try {
+      const { songId, userId } = req.body;
+      if (!songId || !userId) {
+        return res.status(400).json({ message: 'Song ID or User ID not found' });
+      }
+
+      const song = await SongModel.findByIdAndUpdate(songId, { $inc: { playCount: 1 } });
+      if (!song) {
+        return res.status(404).json({ message: 'Song not found' });
+      }
+
+      res.status(200).json({ message: 'Play count increased successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   // [POST] api/songs/store
   async create(req, res, next) {
     try {

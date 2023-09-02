@@ -43,8 +43,11 @@ class AlbumController {
       const data = await AlbumModel.find({ _id: { $in: ids } })
         .populate('genres', 'name slug')
         .populate('artists', 'name slug imageUrl followers')
-        .sort({ playCount: -1, createdAt: -1 })
+        // .sort({ _id: 1 })
         .limit(limit);
+
+      console.log('ids', ids);
+      console.log('data', data);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
