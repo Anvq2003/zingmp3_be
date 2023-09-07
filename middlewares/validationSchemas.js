@@ -81,7 +81,6 @@ const artistSchema = Joi.object({
   slug: Joi.string(),
   roles: Joi.array().items(Joi.string().required()),
   bio: Joi.string(),
-  genres: Joi.array().items(Joi.string().required()),
   followers: Joi.number().default(0),
   status: Joi.boolean().default(true),
 });
@@ -103,7 +102,6 @@ const albumSchema = Joi.object({
   artists: Joi.array().items(Joi.string()),
 
   favorites: Joi.number().default(0),
-  playCount: Joi.number().default(0),
   status: Joi.boolean().default(true),
 });
 

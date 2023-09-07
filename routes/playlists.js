@@ -14,8 +14,8 @@ router.get('/all', PlaylistController.getAll);
 router.get('/trash', PlaylistController.getTrash);
 router.get('/list', PlaylistController.getListByIds);
 router.get('/:param', PlaylistController.getByParam);
-router.post('/songs/add/:playlistId', PlaylistController.addSongToPlaylist);
-router.delete('/songs/remove/:playlistId', PlaylistController.removeSongFromPlaylist);
+router.post('/songs/add/:playlistId', PlaylistController.addSongsToPlaylist);
+router.delete('/songs/remove/:playlistId', PlaylistController.removeSongsFromPlaylist);
 router.post(
   '/store',
   uploadMulter.single('image'),

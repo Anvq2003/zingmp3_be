@@ -1,9 +1,9 @@
-@baseUrl =  http://localhost:3000/api/albums  
+@baseUrl =  http://localhost:3000/api  
 
 # User API
 
 # @name Getall
-GET {{baseUrl}}
+GET {{baseUrl}}/delete
 
 
 ###

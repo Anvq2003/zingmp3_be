@@ -11,7 +11,6 @@ const Artist = new mongoose.Schema(
     slug: { type: String, slug: 'stageName', unique: true },
     roles: [{ type: String, required: true }],
     bio: { type: String },
-    genres: [{ type: String, required: true }],
     followers: { type: Number, default: 0 },
     status: { type: Boolean, default: true },
   },

@@ -72,9 +72,10 @@ class PlaylistController {
     }
   }
 
-  async addSongToPlaylist(req, res) {
+  // /playlists/add-songs/:playlistId
+  async addSongsToPlaylist(req, res) {
     const playlistId = req.params.playlistId;
-    const songId = req.body.songId;
+    const songIds = req.body.songIds;
 
     try {
       const playlist = await PlaylistModel.findById(playlistId);
@@ -82,23 +83,28 @@ class PlaylistController {
         return res.status(404).json({ message: 'Playlist is required.' });
       }
 
-      const song = await SongModel.findById(songId);
-      if (!song) {
-        return res.status(404).json({ message: 'Song is required.' });
+      const songList = [];
+      for (const songId of songIds) {
+        const song = await SongModel.findById(songId);
+        if (!song) {
+          return res.status(404).json({ message: 'Song not found.' });
+        }
+        songList.push(song);
+        playlist.tracks.addToSet(songId);
       }
 
-      playlist.tracks.addToSet(songId);
       await playlist.save();
 
-      return res.status(200).json(song);
+      return res.status(200).json(songList);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   }
 
-  async removeSongFromPlaylist(req, res) {
+  // /playlists/remove-songs/:playlistId
+  async removeSongsFromPlaylist(req, res) {
     const playlistId = req.params.playlistId;
-    const songId = req.body.songId;
+    const songIds = req.body.songIds;
 
     try {
       const playlist = await PlaylistModel.findById(playlistId);
@@ -106,15 +112,16 @@ class PlaylistController {
         return res.status(404).json({ message: 'Playlist is required.' });
       }
 
-      const songIndex = playlist.tracks.indexOf(songId);
-      if (songIndex === -1) {
-        return res.status(404).json({ message: 'Song not found in playlist.' });
+      for (const songId of songIds) {
+        const songIndex = playlist.tracks.indexOf(songId);
+        if (songIndex !== -1) {
+          playlist.tracks.splice(songIndex, 1);
+        }
       }
 
-      playlist.tracks.splice(songIndex, 1);
       await playlist.save();
 
-      return res.status(200).json({ message: 'Song removed from playlist.' });
+      return res.status(200).json(playlist.tracks);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

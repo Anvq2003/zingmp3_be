@@ -11,7 +11,6 @@ const Album = new mongoose.Schema(
     artists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Artist' }],
 
     favorites: { type: Number, default: 0 },
-    playCount: { type: Number, default: 0 },
     status: { type: Boolean, default: true },
   },
   {
