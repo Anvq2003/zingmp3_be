@@ -13,7 +13,7 @@ const Song = new mongoose.Schema(
     composers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Artist' }],
     duration: { type: Number, required: true },
     audioUrl: { type: String, required: true },
-
+    lyric: { type: String, require: true },
     playCount: { type: Number, default: 0 },
     favorites: { type: Number, default: 0 },
     status: { type: Boolean, default: true },

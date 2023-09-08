@@ -46,9 +46,10 @@ const songSchema = Joi.object({
     Joi.any(),
   ),
   oldImage: Joi.string().uri().allow(''),
-  albumId: Joi.string(), // You might want to validate the albumId as well
-  artists: Joi.array().items(Joi.string()), // Validate array of artist IDs
-  composers: Joi.array().items(Joi.string()), // Validate array of composer IDs
+  albumId: Joi.string(),
+  lyric: Joi.string().required(),
+  artists: Joi.array().items(Joi.string()),
+  composers: Joi.array().items(Joi.string()),
   duration: Joi.number().required(),
   audio: Joi.alternatives().try(
     Joi.object({
