@@ -47,7 +47,7 @@ const songSchema = Joi.object({
   ),
   oldImage: Joi.string().uri().allow(''),
   albumId: Joi.string(),
-  lyric: Joi.string().required(),
+  lyric: Joi.string().default(''),
   artists: Joi.array().items(Joi.string()),
   composers: Joi.array().items(Joi.string()),
   duration: Joi.number().required(),
@@ -135,7 +135,7 @@ const userSchema = Joi.object({
   email: Joi.string().email().required(),
   role: Joi.string().default('user'),
   fullName: Joi.string().required(),
-  imageUrl: Joi.string(),
+  imageUrl: Joi.optional(),
   oldImage: Joi.string().uri().allow(''),
   UID: Joi.string().required(),
 

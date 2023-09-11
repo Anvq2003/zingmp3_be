@@ -29,6 +29,7 @@ router.post(
 router.put(
   '/update/:id',
   uploadMulter.single('image'),
+  validateAlbumData,
   handleUploadOrUpdateImage,
   AlbumController.update,
 );

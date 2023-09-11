@@ -172,6 +172,16 @@ class CommonController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  async edit(req, res) {
+    const artists = await ArtistModel.find(); // Lấy danh sách tất cả các tài khoản nghệ sĩ
+
+    artists.forEach(async (artist) => {
+      const randomFollowers = Math.floor(Math.random() * 100001);
+      artist.followers = randomFollowers;
+      await artist.save(); // Lưu thay đổi cho từng tài khoản
+    });
+  }
 }
 
 module.exports = new CommonController();
