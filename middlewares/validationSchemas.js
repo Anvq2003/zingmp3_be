@@ -49,6 +49,7 @@ const songSchema = Joi.object({
   albumId: Joi.string(),
   lyric: Joi.string().default(''),
   artists: Joi.array().items(Joi.string()),
+  albums: Joi.array().items(Joi.string()),
   composers: Joi.array().items(Joi.string()),
   duration: Joi.number().required(),
   audio: Joi.alternatives().try(

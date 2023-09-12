@@ -21,29 +21,27 @@ class CommonController {
       if (songResults.length >= limit) {
         data = songResults;
       } else {
-        const remainingLimit = limit - songResults.length;
-
         const albumResults = await AlbumModel.find({ name: { $regex: q, $options: 'i' } })
           .populate('genres', 'name')
           .populate({
             path: 'artists',
             select: 'name slug',
-          })
-          .limit(remainingLimit);
+          });
 
         data = [...songResults, ...albumResults];
 
         if (data.length < limit) {
           const artistQuery = ArtistModel.find({ stageName: { $regex: q, $options: 'i' } })
             .populate('genres', 'name')
-            .select('name slug stageName roles imageUrl followers')
-            .limit(limit - data.length);
+            .select('name slug stageName imageUrl followers');
 
           const artistResults = await artistQuery;
 
           data = [...data, ...artistResults];
         }
       }
+
+      // data.slice(6);
 
       const sortedData = {
         songs: [],
@@ -60,6 +58,8 @@ class CommonController {
           sortedData.artists.push(item);
         }
       });
+
+      console.log(data);
 
       res.status(200).json(sortedData);
     } catch (error) {
@@ -174,13 +174,14 @@ class CommonController {
   }
 
   async edit(req, res) {
-    const artists = await ArtistModel.find(); // Lấy danh sách tất cả các tài khoản nghệ sĩ
-
-    artists.forEach(async (artist) => {
-      const randomFollowers = Math.floor(Math.random() * 100001);
-      artist.followers = randomFollowers;
-      await artist.save(); // Lưu thay đổi cho từng tài khoản
-    });
+    await SongModel.updateMany(
+      {},
+      {
+        $set: {
+          albums: [],
+        },
+      },
+    );
   }
 }
 
