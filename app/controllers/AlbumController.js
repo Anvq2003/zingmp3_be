@@ -46,15 +46,18 @@ class AlbumController extends BaseController {
   async getListByIds(req, res) {
     try {
       const ids = req.query.ids.split(',');
-      const limit = parseInt(req.query.limit) || 10;
+      if (!ids) {
+        return res.status(404).json({ message: 'IDS is required' });
+      }
 
-      const data = await AlbumModel.find({ _id: { $in: ids } })
-        .populate('genres', 'name slug')
-        .populate('artists', 'name slug imageUrl followers')
-        .limit(limit);
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'genres', select: 'name slug' },
+        { path: 'artists', select: 'name slug' },
+      ];
 
-      console.log('ids', ids);
-      console.log('data', data);
+      const query = { _id: { $in: ids } };
+      const data = await AlbumModel.paginate(query, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -65,9 +68,16 @@ class AlbumController extends BaseController {
   async getByGenreId(req, res) {
     try {
       const genreId = req.params.id;
-      const data = await AlbumModel.find({ genres: { $in: [genreId] } })
-        .populate('genres', 'name slug')
-        .populate('artists', 'name slug');
+      if (!genreId) {
+        return res.status(404).json({ message: 'Genre ID is required' });
+      }
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'genres', select: 'name slug' },
+        { path: 'artists', select: 'name slug' },
+      ];
+
+      const data = await AlbumModel.paginate({ genres: { $in: [genreId] } }, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -82,19 +92,13 @@ class AlbumController extends BaseController {
         return res.status(404).json({ message: 'Artist ID is required' });
       }
 
-      const limit = parseInt(req.query.limit) || 10;
-      const sortField = req.query.sort || 'createdAt';
-      const sortOrder = req.query.order === 'asc' ? 1 : -1;
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'genres', select: 'name slug' },
+        { path: 'artists', select: 'name slug' },
+      ];
 
-      const sortObj = {};
-      sortObj[sortField] = sortOrder;
-
-      const data = await AlbumModel.find({ artists: { $in: [artistId] } })
-        .populate('genres', 'name slug')
-        .populate('artists', 'name slug imageUrl followers')
-        .sort(sortObj)
-        .limit(limit);
-
+      const data = await AlbumModel.paginate({ artists: { $in: [artistId] } }, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -109,20 +113,14 @@ class AlbumController extends BaseController {
         return res.status(404).json({ message: 'Artist IDS is required' });
       }
 
-      const limit = parseInt(req.query.limit) || 10;
-      const sortField = req.query.sort || 'createdAt';
-      const sortOrder = req.query.order === 'asc' ? 1 : -1;
-
-      const sortObj = {};
-      sortObj[sortField] = sortOrder;
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'genres', select: 'name slug' },
+        { path: 'artists', select: 'name slug' },
+      ];
 
       const artistObjectIds = artistIds.map((id) => new mongoose.Types.ObjectId(id));
-      const data = await AlbumModel.find({ artists: { $in: artistObjectIds } })
-        .populate('genres', 'name slug')
-        .populate('artists', 'name slug imageUrl followers')
-        .sort(sortObj)
-        .limit(limit);
-
+      const data = await AlbumModel.paginate({ artists: { $in: artistObjectIds } }, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -133,10 +131,16 @@ class AlbumController extends BaseController {
   async getByGenresIds(req, res) {
     try {
       const genreIds = req.query.ids.split(',');
+      if (!genreIds) {
+        return res.status(404).json({ message: 'Genre IDS is required' });
+      }
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'genres', select: 'name slug' },
+        { path: 'artists', select: 'name slug' },
+      ];
       const genreObjectIds = genreIds.map((id) => new mongoose.Types.ObjectId(id));
-      const data = await AlbumModel.find({ genres: { $in: genreObjectIds } })
-        .populate('genres', 'name slug')
-        .populate('artists', 'name slug');
+      const data = await AlbumModel.paginate({ genres: { $in: genreObjectIds } }, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });

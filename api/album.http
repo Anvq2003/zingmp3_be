@@ -11,12 +11,12 @@ GET {{baseUrl}}
 GET {{baseUrl}}/dance-viet-hay-nhat
 
 ###
-# @name GetbyGenreId
-GET {{baseUrl}}/genre/64db4a1c297475db5f9c3681
+# @name GetbyId
+GET {{baseUrl}}//64db4a1c297475db5f9c3681
 
 ###
-# @name GetbyGenres
-GET {{baseUrl}}/genres?ids=64db4a1c297475db5f9c3681,64ddac6f116682d1fde3bb05
+# @name Getbyids
+GET {{baseUrl}}/list?ids=64ddbd3ed91cf5180bab84f2
 
 ###
 
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 {
 "name": "demo",
-"genres": ["64c9ee2f999d05165d828c68"],
+"s": ["64c9ee2f999d05165d828c68"],
 "artistId": "64c9ee2f999d05165d828c68"
 }
 

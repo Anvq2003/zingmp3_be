@@ -3,16 +3,23 @@
 # User API
 
 # @name Getall
-GET {{baseUrl}}
+GET {{baseUrl}}?page=1&limit=10&sort=-createdAt
 
 ###
 # @name Getall
 GET {{baseUrl}}/all
 
+###
+# @name Getlist
+GET {{baseUrl}}/64c9ee2f999d05165d828c68
 
 ###
 # @name GetbyId
-GET {{baseUrl}}/64c9ee2f999d05165d828c68
+GET {{baseUrl}}/list
+
+###
+# @name Gethot
+GET {{baseUrl}}/hot
 
 ###
 

@@ -35,7 +35,6 @@ const genreSchema = Joi.object({
 
 const songSchema = Joi.object({
   name: Joi.string().required(),
-  slug: Joi.string(),
   image: Joi.alternatives().try(
     Joi.object({
       file: Joi.binary().required(),
@@ -46,7 +45,6 @@ const songSchema = Joi.object({
     Joi.any(),
   ),
   oldImage: Joi.string().uri().allow(''),
-  albumId: Joi.string(),
   lyric: Joi.string().default(''),
   artists: Joi.array().items(Joi.string()),
   albums: Joi.array().items(Joi.string()),
@@ -79,8 +77,6 @@ const artistSchema = Joi.object({
     Joi.any(),
   ),
   oldImage: Joi.string().uri().allow(''),
-  stageName: Joi.string().required(),
-  slug: Joi.string(),
   roles: Joi.array().items(Joi.string().required()),
   bio: Joi.string(),
   followers: Joi.number().default(0),
@@ -89,7 +85,6 @@ const artistSchema = Joi.object({
 
 const albumSchema = Joi.object({
   name: Joi.string().required(),
-  slug: Joi.string(),
   image: Joi.alternatives().try(
     Joi.object({
       file: Joi.binary().required(),
@@ -108,9 +103,9 @@ const albumSchema = Joi.object({
 });
 
 const userAdminSchema = Joi.object({
+  name: Joi.string().required(),
   email: Joi.string().email().required(),
-  role: Joi.string().default('user'),
-  fullName: Joi.string().required(),
+  role: Joi.string().default('USER'),
   image: Joi.alternatives().try(
     Joi.object({
       file: Joi.binary().required(),
@@ -121,32 +116,39 @@ const userAdminSchema = Joi.object({
     Joi.any(),
   ),
   oldImage: Joi.string().uri().allow(''),
-  UID: Joi.string().required(),
-  favoriteAlbums: Joi.array().items(Joi.string()),
-  favoriteSongs: Joi.array().items(Joi.string()),
-  favoriteArtists: Joi.array().items(Joi.string()),
-  history: Joi.array().items(Joi.string()),
-  historyAlbums: Joi.array().items(Joi.string()),
-  historyArtists: Joi.array().items(Joi.string()),
-  historySearches: Joi.array().items(Joi.string()),
+  uid: Joi.string().default(null),
+  favoriteArtists: Joi.array().default([]),
+  favoriteSongs: Joi.array().default([]),
+  favoriteAlbums: Joi.array().default([]),
+  historySongs: Joi.array().default([]),
+  historyAlbums: Joi.array().default([]),
+  historyArtists: Joi.array().default([]),
+  historySearches: Joi.array().default([]),
   status: Joi.boolean().default(true),
 });
 
 const userSchema = Joi.object({
+  name: Joi.string().required(),
   email: Joi.string().email().required(),
-  role: Joi.string().default('user'),
-  fullName: Joi.string().required(),
-  imageUrl: Joi.optional(),
+  role: Joi.string().default('USER'),
+  image: Joi.alternatives().try(
+    Joi.object({
+      file: Joi.binary().required(),
+      filename: Joi.string().required(),
+      mimetype: Joi.string().required(),
+    }),
+    Joi.string().uri(),
+    Joi.any(),
+  ),
   oldImage: Joi.string().uri().allow(''),
-  UID: Joi.string().required(),
-
-  favoriteSongs: Joi.array().items(Joi.string()),
-  favoriteAlbums: Joi.array().items(Joi.string()),
-  followedArtists: Joi.array().items(Joi.string()),
-  historySongs: Joi.array().items(Joi.string()),
-  historyPlaylists: Joi.array().items(Joi.string()),
-  historyAlbums: Joi.array().items(Joi.string()),
-  historySearches: Joi.array().items(Joi.string()),
+  uid: Joi.string().default(null),
+  favoriteArtists: Joi.array().default([]),
+  favoriteSongs: Joi.array().default([]),
+  favoriteAlbums: Joi.array().default([]),
+  historySongs: Joi.array().default([]),
+  historyAlbums: Joi.array().default([]),
+  historyArtists: Joi.array().default([]),
+  historySearches: Joi.array().default([]),
   status: Joi.boolean().default(true),
 });
 

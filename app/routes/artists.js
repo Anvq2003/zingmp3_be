@@ -12,11 +12,10 @@ const {
 } = require('../middlewares/uploadMiddleware');
 
 router.get('/', paginationMiddleware, bindController(ArtistController, 'getQuery'));
-router.get('/all', bindController(ArtistController, 'getAll'));
+router.get('/admin', bindController(ArtistController, 'getAdmin'));
 router.get('/trash', bindController(ArtistController, 'getTrash'));
-router.get('/list', bindController(ArtistController, 'getListByIds'));
+router.get('/list', paginationMiddleware, bindController(ArtistController, 'getListByIds'));
 router.get('/:param', bindController(ArtistController, 'getByParam'));
-router.get('/hot', bindController(ArtistController, 'getHot'));
 router.post(
   '/store',
   uploadMulter.single('image'),

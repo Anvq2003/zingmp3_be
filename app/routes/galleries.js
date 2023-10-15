@@ -13,7 +13,7 @@ const {
 } = require('../middlewares/uploadMiddleware');
 
 router.get('/', paginationMiddleware, bindController(GalleryController, 'getQuery'));
-router.get('/all', bindController(GalleryController, 'getAll'));
+router.get('/admin', bindController(GalleryController, 'getAdmin'));
 router.get('/trash', bindController(GalleryController, 'getTrash'));
 router.get('/:param', bindController(GalleryController, 'getByParam'));
 router.post(

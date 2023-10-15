@@ -8,9 +8,9 @@ class SongController extends BaseController {
     super(SongModel);
   }
   // [GET] api/songs/all
-  async getAll(req, res, next) {
+  async getAll(req, res) {
     try {
-      const data = await SongModel.findWithDeleted().populate('albumId', '_id name slug').populate({
+      const data = await SongModel.findWithDeleted().populate('albums', 'name slug').populate({
         path: 'artists composers',
         select: 'name slug',
       });
@@ -19,50 +19,17 @@ class SongController extends BaseController {
       res.status(500).json({ error: error.message });
     }
   }
+
   // [GET] api/songs
-  async getQuery(req, res, next) {
-    try {
-      const query = Object.assign({}, req.query);
-      const data = await SongModel.find(query).populate('albumId', 'name slug').populate({
-        path: 'artists composers',
-        select: 'name slug',
-      });
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
+  async getQuery(req, res) {
+    const options = req.paginateOptions;
+    options.populate = [
+      { path: 'albums', select: 'name slug' },
+      { path: 'artists composers', select: 'name slug' },
+    ];
 
-  // [GET] api/songs/hot
-  async getHot(req, res, next) {
     try {
-      const limit = parseInt(req.query.limit) || 10;
-      const data = await SongModel.find()
-        .populate('albumId', 'name slug')
-        .populate({
-          path: 'artists composers',
-          select: 'name slug',
-        })
-        .sort({ playCount: -1 })
-        .limit(limit);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  // [GET] api/songs/new
-  async getNew(req, res, next) {
-    try {
-      const limit = parseInt(req.query.limit) || 10;
-      const data = await SongModel.find()
-        .populate('albumId', 'name slug')
-        .populate({
-          path: 'artists composers',
-          select: 'name slug',
-        })
-        .sort({ createdAt: -1, playCount: -1 })
-        .limit(limit);
+      const data = await SongModel.paginate({}, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -70,19 +37,42 @@ class SongController extends BaseController {
   }
 
   // [GET] api/songs/batch?ids=
-  async getListByIds(req, res, next) {
+  async getListByIds(req, res) {
     try {
       const ids = req.query.ids.split(',');
-      const limit = parseInt(req.query.limit) || 10;
+      if (!ids) {
+        return res.status(404).json({ message: 'Song IDS is required' });
+      }
 
-      const data = await SongModel.find({ _id: { $in: ids } })
-        .populate('albumId')
-        .populate({
-          path: 'artists composers',
-          select: 'name slug imageUrl followers',
-        })
-        .sort({ playCount: -1, createdAt: -1 })
-        .limit(limit);
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'albums', select: 'name slug' },
+        { path: 'artists composers', select: 'name slug' },
+      ];
+
+      const songObjectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
+      const data = await SongModel.paginate({ _id: { $in: songObjectIds } }, options);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [GET] api/songs/album/:id
+  async getByAlbumId(req, res) {
+    try {
+      const albumId = req.params.id;
+      if (!albumId) {
+        return res.status(404).json({ message: 'Album ID is required' });
+      }
+
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'albums', select: 'name slug' },
+        { path: 'artists composers', select: 'name slug' },
+      ];
+
+      const data = await SongModel.paginate({ albums: albumId }, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -90,18 +80,23 @@ class SongController extends BaseController {
   }
 
   // [GET] api/songs/artist/:id
-  async getByArtistId(req, res, next) {
+  async getByArtistId(req, res) {
     try {
-      const limit = parseInt(req.query.limit) || 10;
       const artistId = req.params.id;
-      const data = await SongModel.find({ $or: [{ artists: artistId }, { composers: artistId }] })
-        .populate('albumId', 'name slug')
-        .populate({
-          path: 'artists composers',
-          select: 'name slug',
-        })
-        .sort({ playCount: -1, createdAt: -1 })
-        .limit(limit);
+      if (!artistId) {
+        return res.status(404).json({ message: 'Artist ID is required' });
+      }
+
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'albums', select: 'name slug' },
+        { path: 'artists composers', select: 'name slug' },
+      ];
+
+      const data = await SongModel.paginate(
+        { $or: [{ artists: artistId }, { composers: artistId }] },
+        options,
+      );
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -109,30 +104,21 @@ class SongController extends BaseController {
   }
 
   // [GET] api/songs/artists?ids=...
-  async getByArtistsIds(req, res, next) {
+  async getByArtistsIds(req, res) {
     try {
       const artistIds = req.query.ids.split(',');
       if (!artistIds) {
         return res.status(404).json({ message: 'Artist IDS is required' });
       }
 
-      const limit = parseInt(req.query.limit) || 10;
-      const sortField = req.query.sort || 'createdAt';
-      const sortOrder = req.query.order === 'asc' ? 1 : -1;
-
-      const sortObj = {};
-      sortObj[sortField] = sortOrder;
+      const options = req.paginateOptions;
+      options.populate = [
+        { path: 'albums', select: 'name slug' },
+        { path: 'artists composers', select: 'name slug' },
+      ];
 
       const artistObjectIds = artistIds.map((id) => new mongoose.Types.ObjectId(id));
-      const data = await SongModel.find({ artists: { $in: artistObjectIds } })
-        .populate('albumId', 'name slug')
-        .populate({
-          path: 'artists composers',
-          select: 'name slug',
-        })
-        .sort(sortObj)
-        .limit(limit);
-
+      const data = await SongModel.paginate({ artists: { $in: artistObjectIds } }, options);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -140,18 +126,18 @@ class SongController extends BaseController {
   }
 
   // [GET] api/songs/:id
-  async getByParam(req, res, next) {
+  async getByParam(req, res) {
     try {
       const param = req.params.param;
       let song;
 
       if (mongoose.Types.ObjectId.isValid(param)) {
-        song = await SongModel.findById(param).populate('albumId', 'name slug').populate({
+        song = await SongModel.findById(param).populate('albums', 'name slug').populate({
           path: 'artists composers',
           select: 'name slug',
         });
       } else {
-        song = await SongModel.findOne({ slug: param }).populate('albumId', 'name slug').populate({
+        song = await SongModel.findOne({ slug: param }).populate('albums', 'name slug').populate({
           path: 'artists composers',
           select: 'name slug',
         });
@@ -168,7 +154,7 @@ class SongController extends BaseController {
   }
 
   // [POST] api/songs/toggle-like
-  async toggleLike(req, res, next) {
+  async toggleLike(req, res) {
     try {
       const { songId, userId } = req.body;
       if (!songId) {
@@ -230,7 +216,7 @@ class SongController extends BaseController {
   }
 
   // [POST] api/songs/play-count
-  async increaseCount(req, res, next) {
+  async increaseCount(req, res) {
     try {
       const { songId, userId } = req.body;
       if (!songId || !userId) {

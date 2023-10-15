@@ -18,13 +18,12 @@ const upload = uploadMulter.fields([
 ]);
 
 router.get('/', paginationMiddleware, bindController(SongController, 'getQuery'));
-router.get('/all', bindController(SongController, 'getAll'));
-router.get('/hot', bindController(SongController, 'getHot'));
-router.get('/new', bindController(SongController, 'getNew'));
-router.get('/list', bindController(SongController, 'getListByIds'));
-router.get('/artist/:id', bindController(SongController, 'getByArtistId'));
-router.get('/artists/', bindController(SongController, 'getByArtistsIds'));
+router.get('/admin', bindController(SongController, 'getAdmin'));
 router.get('/trash', bindController(SongController, 'getTrash'));
+router.get('/list', paginationMiddleware, bindController(SongController, 'getListByIds'));
+router.get('/album/:id', paginationMiddleware, bindController(SongController, 'getByAlbumId'));
+router.get('/artist/:id', paginationMiddleware, bindController(SongController, 'getByArtistId'));
+router.get('/artists', paginationMiddleware, bindController(SongController, 'getByArtistsIds'));
 router.get('/:param', bindController(SongController, 'getByParam'));
 router.post('/toggle-like', bindController(SongController, 'toggleLike'));
 router.post('/increase-count', bindController(SongController, 'increaseCount'));

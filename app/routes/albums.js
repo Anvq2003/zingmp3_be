@@ -13,13 +13,13 @@ const {
 } = require('../middlewares/uploadMiddleware');
 
 router.get('/', paginationMiddleware, bindController(AlbumController, 'getQuery'));
-router.get('/all', bindController(AlbumController, 'getAll'));
-router.get('/list', bindController(AlbumController, 'getListByIds'));
-router.get('/genre/:id', bindController(AlbumController, 'getByGenreId'));
-router.get('/artist/:id', bindController(AlbumController, 'getByArtistId'));
-router.get('/artists', bindController(AlbumController, 'getByArtistsIds'));
-router.get('/genres', bindController(AlbumController, 'getByGenresIds'));
+router.get('/admin', bindController(AlbumController, 'getAdmin'));
 router.get('/trash', bindController(AlbumController, 'getTrash'));
+router.get('/list', paginationMiddleware, bindController(AlbumController, 'getListByIds'));
+router.get('/genre/:id', paginationMiddleware, bindController(AlbumController, 'getByGenreId'));
+router.get('/artist/:id', paginationMiddleware, bindController(AlbumController, 'getByArtistId'));
+router.get('/artists', paginationMiddleware, bindController(AlbumController, 'getByArtistsIds'));
+router.get('/genres', paginationMiddleware, bindController(AlbumController, 'getByGenresIds'));
 router.get('/:param', bindController(AlbumController, 'getByParam'));
 router.post('/toggle-like', bindController(AlbumController, 'toggleLike'));
 router.post(

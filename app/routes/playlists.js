@@ -13,9 +13,9 @@ const {
 } = require('../middlewares/uploadMiddleware');
 
 router.get('/', paginationMiddleware, bindController(PlaylistController, 'getQuery'));
-router.get('/all', bindController(PlaylistController, 'getAll'));
+router.get('/admin', bindController(PlaylistController, 'getAdmin'));
 router.get('/trash', bindController(PlaylistController, 'getTrash'));
-router.get('/list', bindController(PlaylistController, 'getListByIds'));
+router.get('/list', paginationMiddleware, bindController(PlaylistController, 'getListByIds'));
 router.get('/:param', bindController(PlaylistController, 'getByParam'));
 router.post('/songs/add/:playlistId', bindController(PlaylistController, 'addSongsToPlaylist'));
 router.delete(

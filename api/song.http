@@ -3,12 +3,16 @@
 # User API
 
 # @name Getall
-GET {{baseUrl}}/hot
+GET {{baseUrl}}
 
 
 ###
 # @name GetbyId
 GET {{baseUrl}}/64c9ee2f999d05165d828c68
+
+###
+# @name GetbyalbumId
+GET {{baseUrl}}/album/64ddd25aa38c44515d88b477
 
 ###
 

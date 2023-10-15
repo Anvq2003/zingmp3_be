@@ -5,11 +5,11 @@ const BaseController = require('./BaseController');
 
 class PlaylistController extends BaseController {
   constructor() {
-    super(PlaylistController);
+    super(PlaylistModel);
   }
 
   // [GET] api/playlists/:id
-  async getByParam(req, res, next) {
+  async getByParam(req, res) {
     try {
       const param = req.params.param;
       let playlist;
@@ -44,23 +44,14 @@ class PlaylistController extends BaseController {
     }
   }
 
-  // [GET] api/playlist/list?ids=
-  async getListByIds(req, res, next) {
-    try {
-      const ids = req.query.ids.split(',');
-      const limit = parseInt(req.query.limit) || 10;
-
-      const data = await PlaylistModel.find({ _id: { $in: ids } }).limit(limit);
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
-
   // /playlists/add-songs/:playlistId
   async addSongsToPlaylist(req, res) {
     const playlistId = req.params.playlistId;
     const songIds = req.body.songIds;
+
+    if (!songIds || playlistId) {
+      return res.status(404).json({ message: 'Song is required.' });
+    }
 
     try {
       const playlist = await PlaylistModel.findById(playlistId);
