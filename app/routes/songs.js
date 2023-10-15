@@ -26,7 +26,6 @@ router.get('/artist/:id', paginationMiddleware, bindController(SongController, '
 router.get('/artists', paginationMiddleware, bindController(SongController, 'getByArtistsIds'));
 router.get('/:param', bindController(SongController, 'getByParam'));
 router.post('/toggle-like', bindController(SongController, 'toggleLike'));
-router.post('/increase-count', bindController(SongController, 'increaseCount'));
 router.post(
   '/store',
   upload,
@@ -41,6 +40,8 @@ router.put(
   handleUploadOrUpdateAudioAndImage,
   bindController(SongController, 'update'),
 );
+router.put('/play/:id', bindController(SongController, 'increasePlayCount'));
+
 router.delete('/delete/:id', bindController(SongController, 'delete'));
 router.delete('/delete-many', bindController(SongController, 'deleteMany'));
 router.patch('/restore/:id', bindController(SongController, 'restore'));

@@ -140,6 +140,9 @@ const userSchema = Joi.object({
     Joi.string().uri(),
     Joi.any(),
   ),
+  permissions: Joi.array()
+    .items(Joi.string().valid('READ', 'ADD', 'UPDATE', 'DELETE', 'RESTORE', 'FORCE_DELETE'))
+    .default(null),
   oldImage: Joi.string().uri().allow(''),
   uid: Joi.string().default(null),
   favoriteArtists: Joi.array().default([]),

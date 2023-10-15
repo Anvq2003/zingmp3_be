@@ -215,18 +215,15 @@ class SongController extends BaseController {
     }
   }
 
-  // [POST] api/songs/play-count
-  async increaseCount(req, res) {
+  // [PUT] api/songs/
+  async increasePlayCount(req, res) {
     try {
-      const { songId, userId } = req.body;
-      if (!songId || !userId) {
-        return res.status(400).json({ message: 'Song ID or User ID not found' });
+      const songId = req.param.id;
+      if (!songId) {
+        return res.status(400).json({ message: 'Song ID  not found' });
       }
 
-      const song = await SongModel.findByIdAndUpdate(songId, { $inc: { playCount: 1 } });
-      if (!song) {
-        return res.status(404).json({ message: 'Song not found' });
-      }
+      await SongModel.findByIdAndUpdate(songId, { $inc: { playCount: 1 } });
 
       res.status(200).json({ message: 'Play count increased successfully' });
     } catch (error) {

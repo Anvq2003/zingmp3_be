@@ -29,7 +29,11 @@ const User = new mongoose.Schema(
     role: { type: String, required: true, default: 'USER' },
     uid: { type: String, default: null },
     imageUrl: { type: String },
-
+    permissions: {
+      type: Array,
+      enum: ['READ', 'ADD', 'UPDATE', 'DELETE', 'RESTORE', 'FORCE_DELETE'],
+      default: null,
+    },
     followedArtists: [InfoArtistSchema],
 
     favoriteSongs: [InfoSongSchema],

@@ -16,7 +16,7 @@ class PlaylistController extends BaseController {
 
       if (mongoose.Types.ObjectId.isValid(param)) {
         playlist = await PlaylistModel.findById(param)
-          .populate('userId', 'fullName')
+          .populate('userId', 'name')
           .populate({
             path: 'tracks',
             populate: {
@@ -25,7 +25,7 @@ class PlaylistController extends BaseController {
           });
       } else {
         playlist = await PlaylistModel.findOne({ slug: param })
-          .populate('userId', 'fullName')
+          .populate('userId', 'name')
           .populate({
             path: 'tracks',
             populate: {
@@ -39,6 +39,25 @@ class PlaylistController extends BaseController {
       }
 
       res.status(200).json(playlist);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // [GET] api/playlists/user/:id
+  async getByUser(req, res) {
+    try {
+      const userId = req.params.id;
+      const playlists = await PlaylistModel.find({ userId })
+        .populate('userId', 'name')
+        .populate({
+          path: 'tracks',
+          populate: {
+            path: 'artists composers albumId',
+          },
+        });
+
+      res.status(200).json(playlists);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

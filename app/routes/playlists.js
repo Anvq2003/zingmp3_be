@@ -14,14 +14,12 @@ const {
 
 router.get('/', paginationMiddleware, bindController(PlaylistController, 'getQuery'));
 router.get('/admin', bindController(PlaylistController, 'getAdmin'));
+router.get('/user/:id', bindController(PlaylistController, 'getByUser'));
 router.get('/trash', bindController(PlaylistController, 'getTrash'));
 router.get('/list', paginationMiddleware, bindController(PlaylistController, 'getListByIds'));
 router.get('/:param', bindController(PlaylistController, 'getByParam'));
-router.post('/songs/add/:playlistId', bindController(PlaylistController, 'addSongsToPlaylist'));
-router.delete(
-  '/songs/remove/:playlistId',
-  bindController(PlaylistController, 'removeSongsFromPlaylist'),
-);
+router.post('/:playlistId/add', bindController(PlaylistController, 'addSongsToPlaylist'));
+router.delete('/:playlistId/remove', bindController(PlaylistController, 'removeSongsFromPlaylist'));
 router.post(
   '/store',
   uploadMulter.single('image'),
